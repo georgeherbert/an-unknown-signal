@@ -3,9 +3,19 @@ import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
 
+def linearRegression(X, y):
+    ones = np.ones((len(X), 1))
+    X = np.hstack([X, ones])
+    ws = np.linalg.inv(X.T @ X) @ X.T @ y
+    grad = ws[0][0]
+    intercept = ws[1][0]
+    return grad, intercept
+
 def loadPoints(filename):
     points = pd.read_csv(filename, header=None)
-    return points[0].values, points[1].values
+    xs = np.array([[x] for x in points[0].values])
+    ys = np.array([[y] for y in points[1].values])
+    return xs, ys
 
 def plot(xs, ys):
     assert len(xs) == len(ys)
@@ -20,6 +30,8 @@ def plot(xs, ys):
 # Main function
 def main():
     xs, ys = loadPoints(sys.argv[1])
+    grad, intercept = linearRegression(xs, ys)
+    print(f"y = {grad}x + {intercept}")
     if len(sys.argv) == 3:
         if sys.argv[2] == "--plot":    
             plot(xs, ys)

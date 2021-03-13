@@ -19,14 +19,26 @@ def splitPoints(xs, ys):
 
 # Returns the weights from regression
 def regression(X, y):
+    return np.linalg.inv(X.T @ X) @ X.T @ y
+
+def linearRegression(X, y):
     ones = np.ones((len(X), 1))
     X = np.hstack([X, ones])
-    return np.linalg.inv(X.T @ X) @ X.T @ y
+    ws = regression(X, y)
+    return ws
+
+def nonLinearRegression(X, y):
+    ones = np.ones((len(X), 1))
+    squared = X ** 2
+    X = np.hstack([squared, X, ones])
+    ws = regression(X, y)
+    return ws
 
 # Calculates the estimated points based on the lines
 def calcEstimated(xs, ws):
     ones = np.ones((len(xs), 1))
-    xs = np.hstack([xs, ones])
+    squared = xs ** 2
+    xs = np.hstack([squared, xs, ones])
     estimates = xs @ ws
     return estimates
 
@@ -56,11 +68,9 @@ def plot(xs, ys, wsList):
     plt.scatter(xs, ys, c=colour)
     for i in range(len(wsList)):
         ws = wsList[i]
-        x1 = xs[i * 20]
-        x2 = xs[i * 20 + 19]
-        y1 = x1 * ws[0][0] + ws[1][0]
-        y2 = x2 * ws[0][0] + ws[1][0]
-        plt.plot([x1, x2], [y1, y2])
+        x = np.linspace(xs[i * 20], xs[i * 20 + 19], 1000)
+        y = ws[0][0] * x * x + ws[1][0] * x + ws[2][0]
+        plt.plot(x, y)
     plt.show()
 
 # Main function
@@ -70,7 +80,7 @@ def main():
     wsList = []
     
     for i in range(len(xsSplit)):
-        ws = regression(xsSplit[i], ysSplit[i])
+        ws = nonLinearRegression(xsSplit[i], ysSplit[i])
         wsList.append(ws)
     
     error = calcTotalError(xsSplit, ysSplit, wsList)
@@ -84,5 +94,6 @@ if __name__ == "__main__":
     numOfArgs = len(sys.argv)
     if ((numOfArgs == 2) | (numOfArgs == 3)):
         main()
+        print("")
     else:
         print("Invalid argument(s)")

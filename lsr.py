@@ -32,17 +32,17 @@ def linearRegression(X, y):
     return ws
 
 # Calculates the x to the power of values for the equation
-def calcXPoly(xs, order):
-    xPolyList = []
+def calcXPowers(xs, order):
+    XPowersList = []
     for i in range(order + 1):
         values = xs ** i
-        xPolyList.insert(0, values)
-    xPoly = np.hstack(xPolyList)
-    return xPoly
+        XPowersList.insert(0, values)
+    XPowers = np.hstack(XPowersList)
+    return XPowers
 
-# Returns the weights of nonlinear regression
-def nonLinearRegression(X, y):
-    X = calcXPoly(X, 3)
+# Returns the weights of polynomialRegression regression
+def polynomialRegression(X, y):
+    X = calcXPowers(X, 3)
     ws = regression(X, y)
     return ws
 
@@ -94,7 +94,7 @@ def main():
     wsList = []
     
     for i in range(len(xsSplit)):
-        ws = nonLinearRegression(xsSplit[i], ysSplit[i])
+        ws = polynomialRegression(xsSplit[i], ysSplit[i])
         wsList.append(ws)
     
     error = calcTotalError(xsSplit, ysSplit, wsList)

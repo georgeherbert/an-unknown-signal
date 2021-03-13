@@ -66,11 +66,12 @@ def plot(xs, ys, wsList):
     colour = np.concatenate([[i] * 20 for i in range(num_segments)])
     plt.set_cmap('Dark2')
     plt.scatter(xs, ys, c=colour)
-    for i in range(len(wsList)):
+    for i in range(len(wsList)): # Plot a line for each line segment
         ws = wsList[i]
-        x = np.linspace(xs[i * 20], xs[i * 20 + 19], 1000)
-        y = ws[0][0] * x * x + ws[1][0] * x + ws[2][0]
-        plt.plot(x, y)
+        line = np.poly1d(ws.flatten())
+        xsLine = np.linspace(xs[i * 20], xs[i * 20 + 19], 1000)
+        ysLine = line(xsLine)
+        plt.plot(xsLine, ysLine)
     plt.show()
 
 # Main function

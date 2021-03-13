@@ -19,7 +19,11 @@ def splitPoints(xs, ys):
 
 # Returns the weights from regression
 def regression(X, y):
-    return np.linalg.inv(X.T @ X) @ X.T @ y
+    # global p1
+    # p1 = X.T @ X
+    reg = 0
+    p = X.T @ X
+    return np.linalg.inv(p + reg * np.eye(p.shape[0], p.shape[1])) @ X.T @ y # Not sure if the shape of the regulariser is correct
 
 # Linear regression
 def linearRegression(X, y):
@@ -39,7 +43,7 @@ def calcXPoly(xs, order):
 
 # Returns the weights of nonlinear regression
 def nonLinearRegression(X, y):
-    X = calcXPoly(X, 3)
+    X = calcXPoly(X, 1)
     ws = regression(X, y)
     return ws
 

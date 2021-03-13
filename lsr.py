@@ -27,10 +27,16 @@ def linearRegression(X, y):
     ws = regression(X, y)
     return ws
 
+def calcXPoly(xs, order):
+    xPolyList = []
+    for i in range(order + 1):
+        values = xs ** i
+        xPolyList.insert(0, values)
+    xPoly = np.hstack(xPolyList)
+    return xPoly
+
 def nonLinearRegression(X, y):
-    ones = np.ones((len(X), 1))
-    squared = X ** 2
-    X = np.hstack([squared, X, ones])
+    X = calcXPoly(X, 3)
     ws = regression(X, y)
     return ws
 

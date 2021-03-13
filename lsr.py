@@ -25,9 +25,9 @@ def regression(X, y):
     return np.linalg.inv(X.T @ X + reg * np.eye(X.shape[1], X.shape[1])) @ X.T @ y # Not sure if the shape of the regulariser is correct
 
 # Linear regression
-def linearRegression(X, y):
-    ones = np.ones((len(X), 1))
-    X = np.hstack([X, ones])
+def linearRegression(xs, y):
+    ones = np.ones((len(xs), 1))
+    X = np.hstack([xs, ones])
     ws = regression(X, y)
     return ws
 
@@ -41,15 +41,23 @@ def calcXPowers(xs, order):
     return XPowers
 
 # Returns the weights of polynomialRegression regression
-def polynomialRegression(X, y):
-    X = calcXPowers(X, 3)
+def polynomialRegression(xs, y):
+    X = calcXPowers(xs, 2)
+    ws = regression(X, y)
+    return ws
+
+# Returns the weight of exponential regression
+def exponentialRegression(xs, y):
+    ones = np.ones((len(xs), 1))
+    exps = np.exp(xs)
+    X = np.hstack([exps, ones])
     ws = regression(X, y)
     return ws
 
 # Calculates the estimated points based on the lines
 def calcEstimated(xs, ws):
-    line = np.poly1d(ws.flatten())
-    estimates = line(xs)
+    line = np.poly1d(ws.flatten()) #Polynomial
+    estimates = line(xs) # Polynomial
     # ones = np.ones((len(xs), 1))
     # squared = xs ** 2
     # xs = np.hstack([squared, xs, ones])
@@ -78,12 +86,13 @@ def plot(xs, ys, wsList):
     num_segments = len_data // 20
     colour = np.concatenate([[i] * 20 for i in range(num_segments)])
     plt.set_cmap('Dark2')
-    plt.scatter(xs, ys, c=colour)
+    plt.scatter(xs, ys, c = colour)
     for i in range(len(wsList)): # Plot a line for each line segment
         ws = wsList[i]
-        line = np.poly1d(ws.flatten())
+        line = np.poly1d(ws.flatten()) # Polynomial
         xsLine = np.linspace(xs[i * 20], xs[i * 20 + 19], 1000)
-        ysLine = line(xsLine)
+        ysLine = line(xsLine) # Polynomial
+        # ysLine = ws[0] * np.exp(xsLine) + ws[1] # Exponential
         plt.plot(xsLine, ysLine)
     plt.show()
 
@@ -95,6 +104,7 @@ def main():
     
     for i in range(len(xsSplit)):
         ws = polynomialRegression(xsSplit[i], ysSplit[i])
+        print(ws)
         wsList.append(ws)
     
     error = calcTotalError(xsSplit, ysSplit, wsList)

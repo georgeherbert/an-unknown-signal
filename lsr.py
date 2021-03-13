@@ -36,18 +36,19 @@ def nonLinearRegression(X, y):
 
 # Calculates the estimated points based on the lines
 def calcEstimated(xs, ws):
-    ones = np.ones((len(xs), 1))
-    squared = xs ** 2
-    xs = np.hstack([squared, xs, ones])
-    estimates = xs @ ws
+    line = np.poly1d(ws.flatten())
+    estimates = line(xs)
+    # ones = np.ones((len(xs), 1))
+    # squared = xs ** 2
+    # xs = np.hstack([squared, xs, ones])
+    # estimates = xs @ ws
     return estimates
 
 # Calculates the error of a 20 point segment
 def calcSegmentError(xs, ys, ws):
     esimates = calcEstimated(xs, ws)
     diff = ys - esimates
-    diffSquared = diff ** 2
-    diffSquaredTotal = np.sum(diffSquared)
+    diffSquaredTotal = np.sum(diff ** 2)
     return diffSquaredTotal
 
 # Calculates the total error for every point

@@ -21,12 +21,14 @@ def splitPoints(xs, ys):
 def regression(X, y):
     return np.linalg.inv(X.T @ X) @ X.T @ y
 
+# Linear regression
 def linearRegression(X, y):
     ones = np.ones((len(X), 1))
     X = np.hstack([X, ones])
     ws = regression(X, y)
     return ws
 
+# Calculates the x to the power of values for the equation
 def calcXPoly(xs, order):
     xPolyList = []
     for i in range(order + 1):
@@ -35,6 +37,7 @@ def calcXPoly(xs, order):
     xPoly = np.hstack(xPolyList)
     return xPoly
 
+# Returns the weights of nonlinear regression
 def nonLinearRegression(X, y):
     X = calcXPoly(X, 3)
     ws = regression(X, y)

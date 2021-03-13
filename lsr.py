@@ -19,8 +19,8 @@ def splitPoints(xs, ys):
 
 # Returns the weights from regression
 def regression(X, y):
-    global p1
-    p1 = X.T @ X
+    # global p1
+    # p1 = X.T @ X
     reg = 0
     return np.linalg.inv(X.T @ X + reg * np.eye(X.shape[1], X.shape[1])) @ X.T @ y # Not sure if the shape of the regulariser is correct
 

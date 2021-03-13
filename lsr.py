@@ -23,15 +23,20 @@ def regression(X, y):
     X = np.hstack([X, ones])
     return np.linalg.inv(X.T @ X) @ X.T @ y
 
+# Calculates the estimated points based on the lines
+def calcEstimated(xs, ws):
+    ones = np.ones((len(xs), 1))
+    xs = np.hstack([xs, ones])
+    estimates = xs @ ws
+    return estimates
+
 # Calculates the error of a 20 point segment
 def calcSegmentError(xs, ys, ws):
-    total = 0
-    for i in range(len(xs)):
-        estimated = ws[0][0] * xs[i][0] + ws[1][0]
-        diff = ys[i][0] - estimated
-        diffSquared = diff ** 2
-        total += diffSquared
-    return total
+    esimates = calcEstimated(xs, ws)
+    diff = ys - esimates
+    diffSquared = diff ** 2
+    diffSquaredTotal = np.sum(diffSquared)
+    return diffSquaredTotal
 
 # Calculates the total error for every point
 def calcTotalError(xsSplit, ysSplit, wsList):

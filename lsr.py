@@ -43,7 +43,7 @@ def calcXPowers(xs, order):
 
 # Returns the weights of polynomialRegression regression
 def polynomialRegression(xs, y):
-    X = calcXPowers(xs, 5)
+    X = calcXPowers(xs, 3)
     ws = regression(X, y)
     return ws
 

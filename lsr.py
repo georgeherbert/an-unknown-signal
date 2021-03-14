@@ -22,7 +22,8 @@ def regression(X, y):
     # global p1
     # p1 = X.T @ X
     reg = 0
-    return np.linalg.inv(X.T @ X + reg * np.eye(X.shape[1], X.shape[1])) @ X.T @ y # Not sure if the shape of the regulariser is correct
+    # return np.linalg.inv(X.T @ X + reg * np.identity(X.shape[1])) @ X.T @ y 
+    return np.linalg.solve(X.T @ X + reg * np.identity(X.shape[1]), X.T @ y) # Not sure if the shape of the regulariser is correct
 
 # Linear regression
 def linearRegression(xs, y):
@@ -42,7 +43,7 @@ def calcXPowers(xs, order):
 
 # Returns the weights of polynomialRegression regression
 def polynomialRegression(xs, y):
-    X = calcXPowers(xs, 2)
+    X = calcXPowers(xs, 5)
     ws = regression(X, y)
     return ws
 

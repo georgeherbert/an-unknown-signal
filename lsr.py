@@ -129,9 +129,6 @@ def plot(xs, ys, wsList, funcsList):
 
 # Main function
 def main():
-    global xsSplitTraining
-    global xsSplitValidation
-
     xs, ys = loadPoints(sys.argv[1])
     xsSplit, ysSplit = splitPoints(xs, ys)
     xsSplitTraining, xsSplitValidation, ysSplitTraining, ysSplitValidation = splitTrainingValidation(xsSplit, ysSplit)

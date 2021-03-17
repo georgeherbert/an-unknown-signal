@@ -17,6 +17,22 @@ def splitPoints(xs, ys):
     ysSplit = np.vsplit(ys, numSegments)
     return xsSplit, ysSplit
 
+# Splits the set of xs or ys into training and validation
+def splitTrainingValidation(xsSplit, ysSplit):
+    xsSplitTraining = []
+    xsSplitValidation = []
+    ysSplitTraining = []
+    ysSplitValidation = []
+    for i in range(len(xsSplit)):
+        pos = np.random.permutation(len(xsSplit[i]))
+        xsSplit[i] = xsSplit[i][pos]
+        ysSplit[i] = ysSplit[i][pos]
+        xsSplitTraining.append(xsSplit[i][:12])
+        xsSplitValidation.append(xsSplit[i][12:])
+        ysSplitTraining.append(ysSplit[i][:12])
+        ysSplitValidation.append(ysSplit[i][12:])
+    return xsSplitTraining, xsSplitValidation, ysSplitTraining, ysSplitValidation
+
 # Returns the weights from regression
 def regressionNormalEquation(X, y):
     # return np.linalg.inv(X.T @ X + reg * np.identity(X.shape[1])) @ X.T @ y 
@@ -52,6 +68,7 @@ def exponentialRegression(xs, y):
     ws = regressionNormalEquation(X, y)
     return ws
 
+# Performs a specific type of regression based on the function type givenn
 def regression(xs, y, func):
     ws = np.array([])
     if func == "linear":
@@ -112,6 +129,9 @@ def plot(xs, ys, wsList, funcsList):
 def main():
     xs, ys = loadPoints(sys.argv[1])
     xsSplit, ysSplit = splitPoints(xs, ys)
+
+    xsSplitTraining, xsSplitValidation, ysSplitTraining, ysSplitValidation = splitTrainingValidation(xsSplit, ysSplit)
+
     wsList = []
     funcsList = []
 
@@ -125,8 +145,8 @@ def main():
 
         smallestError = np.Inf
         for func in funcOptions:
-            potentialWs = regression(xsSplit[i], ysSplit[i], func)
-            error = calcSegmentError(xsSplit[i], ysSplit[i], potentialWs, func)
+            potentialWs = regression(xsSplitTraining[i], ysSplitTraining[i], func)
+            error = calcSegmentError(xsSplitValidation[i], ysSplitValidation[i], potentialWs, func)
             if error < smallestError:
                 smallestError = error
                 ws = potentialWs

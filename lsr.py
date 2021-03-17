@@ -35,7 +35,7 @@ def splitTrainingValidation(xsSplit, ysSplit):
 
 # Returns the weights from regression
 def regressionNormalEquation(X, y):
-    # return np.linalg.inv(X.T @ X + reg * np.identity(X.shape[1])) @ X.T @ y 
+    # return np.linalg.inv(X.T @ X) @ X.T @ y 
     return np.linalg.solve(X.T @ X, X.T @ y) # Not sure if the shape of the regulariser is correct
 
 # Linear regression
@@ -60,11 +60,11 @@ def polynomialRegression(xs, y):
     ws = regressionNormalEquation(X, y)
     return ws
 
-# Returns the weight of exponential regression
-def exponentialRegression(xs, y):
+# Returns the weight of sinusoidal regression
+def sinusoidalRegression(xs, y):
     ones = np.ones((len(xs), 1))
-    exps = np.exp(xs)
-    X = np.hstack([exps, ones])
+    sinxs = np.sin(xs)
+    X = np.hstack([sinxs, ones])
     ws = regressionNormalEquation(X, y)
     return ws
 
@@ -75,8 +75,8 @@ def regression(xs, y, func):
         ws = linearRegression(xs, y)
     elif func == "polynomial":
         ws = polynomialRegression(xs, y)
-    elif func == "exponential":
-        ws = exponentialRegression(xs, y)
+    elif func == "sine":
+        ws = sinusoidalRegression(xs, y)
     return ws
 
 # Calculates the estimated points based on the lines
@@ -85,8 +85,8 @@ def calcEstimated(xs, ws, func):
     if (func == "polynomial") | (func == "linear"):
         line = np.poly1d(ws.flatten()) #Polynomial
         estimates = line(xs) # Polynomial
-    if func == "exponential":
-        estimates = ws[0] * np.exp(xs) + ws[1]
+    if func == "sine":
+        estimates = ws[0] * np.sin(xs) + ws[1]
     return estimates
 
 # Calculates the error of a 20 point segment
@@ -120,8 +120,8 @@ def plot(xs, ys, wsList, funcsList):
         if (funcsList[i] == "linear") | (funcsList[i] == "polynomial"):
             line = np.poly1d(ws.flatten()) # Polynomial
             ysLine = line(xsLine) # Polynomial
-        elif funcsList[i] == "exponential":
-            ysLine = ws[0] * np.exp(xsLine) + ws[1] # Exponential
+        elif funcsList[i] == "sine":
+            ysLine = ws[0] * np.sin(xsLine) + ws[1] # Sine
         plt.plot(xsLine, ysLine)
     plt.show()
 
@@ -135,7 +135,7 @@ def main():
     wsList = []
     funcsList = []
 
-    funcOptions = ["linear", "polynomial", "exponential"]
+    funcOptions = ["linear", "polynomial", "sine"]
 
     # func = "polynomial"
 

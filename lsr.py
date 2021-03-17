@@ -64,7 +64,7 @@ def unknownRegression(xs, y, func):
     return ws
 
 # Calculates the estimated points based on the lines
-def calcEstimated(xs, ws, func, unknown):
+def calcEstimated(xs, ws, func):
     estimates = np.array([])
     if (func == "polynomial") | (func == "linear"):
         line = np.poly1d(ws.flatten()) #Polynomial
@@ -78,17 +78,17 @@ def calcEstimated(xs, ws, func, unknown):
     return estimates
 
 # Calculates the error of a 20 point segment
-def calcSegmentError(xs, ys, ws, func, unknown):
-    esimates = calcEstimated(xs, ws, func, unknown)
+def calcSegmentError(xs, ys, ws, func):
+    esimates = calcEstimated(xs, ws, func)
     diff = ys - esimates
     diffSquaredTotal = np.sum(diff ** 2)
     return diffSquaredTotal
 
 # Calculates the total error for every point
-def calcTotalError(xsSplit, ysSplit, wsList, func, unknown):
+def calcTotalError(xsSplit, ysSplit, wsList, func):
     total = 0
     for i in range(len(xsSplit)):
-        total += calcSegmentError(xsSplit[i], ysSplit[i], wsList[i], func, unknown)
+        total += calcSegmentError(xsSplit[i], ysSplit[i], wsList[i], func)
     return total
 
 # Plots a series of points on a scatter plot
@@ -119,14 +119,13 @@ def main():
     wsList = []
 
     func = "linear"
-    unknown = None
 
     for i in range(len(xsSplit)):
         ws = linearRegression(xsSplit[i], ysSplit[i])
         print(ws)
         wsList.append(ws)
     
-    error = calcTotalError(xsSplit, ysSplit, wsList, func, unknown)
+    error = calcTotalError(xsSplit, ysSplit, wsList, func)
     print(error)
 
     if len(sys.argv) == 3:

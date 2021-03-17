@@ -100,7 +100,7 @@ def calcSegmentError(xs, ys, ws, func):
 def calcTotalError(xsSplit, ysSplit, wsList, funcsList):
     total = 0
     for i in range(len(xsSplit)):
-        print(funcsList[i], wsList[i])
+        # print(funcsList[i], wsList[i])
         total += calcSegmentError(xsSplit[i], ysSplit[i], wsList[i], funcsList[i])
     return total
 
@@ -127,9 +127,11 @@ def plot(xs, ys, wsList, funcsList):
 
 # Main function
 def main():
+    global xsSplitTraining
+    global xsSplitValidation
+
     xs, ys = loadPoints(sys.argv[1])
     xsSplit, ysSplit = splitPoints(xs, ys)
-
     xsSplitTraining, xsSplitValidation, ysSplitTraining, ysSplitValidation = splitTrainingValidation(xsSplit, ysSplit)
 
     wsList = []
@@ -145,7 +147,7 @@ def main():
         for func in funcOptions:
             potentialWs = regression(xsSplitTraining[i], ysSplitTraining[i], func)
             error = calcSegmentError(xsSplitValidation[i], ysSplitValidation[i], potentialWs, func)
-            print(f"{func}: {error}")
+            # print(f"{func}: {error}")
             if error < smallestError:
                 smallestError = error
                 ws = potentialWs

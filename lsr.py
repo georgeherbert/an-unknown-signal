@@ -111,10 +111,10 @@ def main():
     xsSplit, ysSplit = splitPoints(xs, ys)
     wsList = []
 
-    func = "linear"
+    func = "polynomial"
 
     for i in range(len(xsSplit)):
-        ws = linearRegression(xsSplit[i], ysSplit[i])
+        ws = polynomialRegression(xsSplit[i], ysSplit[i])
         print(ws)
         wsList.append(ws)
     

@@ -18,7 +18,7 @@ def splitPoints(xs, ys):
     return xsSplit, ysSplit
 
 # Returns the weights from regression
-def regression(X, y):
+def regressionNormalEquation(X, y):
     # return np.linalg.inv(X.T @ X + reg * np.identity(X.shape[1])) @ X.T @ y 
     return np.linalg.solve(X.T @ X, X.T @ y) # Not sure if the shape of the regulariser is correct
 
@@ -26,7 +26,7 @@ def regression(X, y):
 def linearRegression(xs, y):
     ones = np.ones((len(xs), 1))
     X = np.hstack([xs, ones])
-    ws = regression(X, y)
+    ws = regressionNormalEquation(X, y)
     return ws
 
 # Calculates the x to the power of values for the equation
@@ -41,7 +41,7 @@ def calcXPowers(xs, order):
 # Returns the weights of polynomialRegression regression
 def polynomialRegression(xs, y):
     X = calcXPowers(xs, 3)
-    ws = regression(X, y)
+    ws = regressionNormalEquation(X, y)
     return ws
 
 # Returns the weight of exponential regression
@@ -49,15 +49,17 @@ def exponentialRegression(xs, y):
     ones = np.ones((len(xs), 1))
     exps = np.exp(xs)
     X = np.hstack([exps, ones])
-    ws = regression(X, y)
+    ws = regressionNormalEquation(X, y)
     return ws
 
-# Returns the weight of 
-def unknownRegression(xs, y, func):
-    ones = np.ones((len(xs, 1)))
-    unknown = func(xs)
-    X = np.hstack([unknown, ones])
-    ws = regression(X, y)
+def regression(xs, y, func):
+    ws = np.array([])
+    if func == "linear":
+        ws = linearRegression(xs, y)
+    elif func == "polynomial":
+        ws = polynomialRegression(xs, y)
+    elif func == "exponential":
+        ws = exponentialRegression(xs, y)
     return ws
 
 # Calculates the estimated points based on the lines
@@ -111,10 +113,13 @@ def main():
     xsSplit, ysSplit = splitPoints(xs, ys)
     wsList = []
 
+    funcs = ["linear", "polynomial", "exponential"]
+
     func = "polynomial"
 
     for i in range(len(xsSplit)):
-        ws = polynomialRegression(xsSplit[i], ysSplit[i])
+
+        ws = regression(xsSplit[i], ysSplit[i], func)
         print(ws)
         wsList.append(ws)
     

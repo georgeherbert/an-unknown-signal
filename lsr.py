@@ -145,6 +145,7 @@ def main():
         for func in funcOptions:
             potentialWs = regression(xsSplitTraining[i], ysSplitTraining[i], func)
             error = calcSegmentError(xsSplitValidation[i], ysSplitValidation[i], potentialWs, func)
+            print(f"{func}: {error}")
             if error < smallestError:
                 smallestError = error
                 ws = potentialWs

@@ -137,8 +137,6 @@ def main():
 
     funcOptions = ["linear", "polynomial", "sine"]
 
-    # func = "polynomial"
-
     for i in range(len(xsSplit)):
         ws = np.array([])
         funcUsed = ""

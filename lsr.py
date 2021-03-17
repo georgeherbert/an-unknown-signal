@@ -82,10 +82,12 @@ def regression(xs, y, func):
 # Calculates the estimated points based on the lines
 def calcEstimated(xs, ws, func):
     estimates = np.array([])
-    if (func == "polynomial") | (func == "linear"):
-        line = np.poly1d(ws.flatten()) #Polynomial
-        estimates = line(xs) # Polynomial
-    if func == "sine":
+    if func == "linear":
+        estimates = ws[0] * xs + ws[1]
+    elif func == "polynomial":
+        line = np.poly1d(ws.flatten())
+        estimates = line(xs)
+    elif func == "sine":
         estimates = ws[0] * np.sin(xs) + ws[1]
     return estimates
 
@@ -156,6 +158,8 @@ def main():
         funcsList.append(funcUsed)
         wsList.append(ws)
     
+    print(funcsList)
+
     error = calcTotalError(xsSplit, ysSplit, wsList, funcsList)
     print(error)
 

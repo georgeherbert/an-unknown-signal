@@ -27,16 +27,16 @@ def splitTrainingValidation(xsSplit, ysSplit):
         pos = np.random.permutation(len(xsSplit[i]))
         xsSplit[i] = xsSplit[i][pos]
         ysSplit[i] = ysSplit[i][pos]
-        xsSplitTraining.append(xsSplit[i][:12])
-        xsSplitValidation.append(xsSplit[i][12:])
-        ysSplitTraining.append(ysSplit[i][:12])
-        ysSplitValidation.append(ysSplit[i][12:])
+        xsSplitTraining.append(xsSplit[i][:10])
+        xsSplitValidation.append(xsSplit[i][10:])
+        ysSplitTraining.append(ysSplit[i][:10])
+        ysSplitValidation.append(ysSplit[i][10:])
     return xsSplitTraining, xsSplitValidation, ysSplitTraining, ysSplitValidation
 
 # Returns the weights from regression
 def regressionNormalEquation(X, y):
-    # return np.linalg.inv(X.T @ X) @ X.T @ y 
-    return np.linalg.solve(X.T @ X, X.T @ y) # Not sure if the shape of the regulariser is correct
+    return np.linalg.inv(X.T @ X) @ X.T @ y 
+    # return np.linalg.solve(X.T @ X, X.T @ y) # Not sure if the shape of the regulariser is correct
 
 # Linear regression
 def linearRegression(xs, y):

@@ -19,11 +19,8 @@ def splitPoints(xs, ys):
 
 # Returns the weights from regression
 def regression(X, y):
-    # global p1
-    # p1 = X.T @ X
-    reg = 0
     # return np.linalg.inv(X.T @ X + reg * np.identity(X.shape[1])) @ X.T @ y 
-    return np.linalg.solve(X.T @ X + reg * np.identity(X.shape[1]), X.T @ y) # Not sure if the shape of the regulariser is correct
+    return np.linalg.solve(X.T @ X, X.T @ y) # Not sure if the shape of the regulariser is correct
 
 # Linear regression
 def linearRegression(xs, y):
@@ -71,10 +68,6 @@ def calcEstimated(xs, ws, func):
         estimates = line(xs) # Polynomial
     if func == "exponential":
         estimates = ws[0] * np.exp(xs) + ws[1]
-    # ones = np.ones((len(xs), 1))
-    # squared = xs ** 2
-    # xs = np.hstack([squared, xs, ones])
-    # estimates = xs @ ws
     return estimates
 
 # Calculates the error of a 20 point segment

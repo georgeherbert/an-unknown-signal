@@ -55,10 +55,22 @@ def exponentialRegression(xs, y):
     ws = regression(X, y)
     return ws
 
+# Returns the weight of 
+def unknownRegression(xs, y, func):
+    ones = np.ones((len(xs, 1)))
+    unknown = func(xs)
+    X = np.hstack([unknown, ones])
+    ws = regression(X, y)
+    return ws
+
 # Calculates the estimated points based on the lines
-def calcEstimated(xs, ws):
-    line = np.poly1d(ws.flatten()) #Polynomial
-    estimates = line(xs) # Polynomial
+def calcEstimated(xs, ws, func, unknown):
+    estimates = np.array([])
+    if (func == "polynomial") | (func == "linear"):
+        line = np.poly1d(ws.flatten()) #Polynomial
+        estimates = line(xs) # Polynomial
+    if func == "exponential":
+        estimates = ws[0] * np.exp(xs) + ws[1]
     # ones = np.ones((len(xs), 1))
     # squared = xs ** 2
     # xs = np.hstack([squared, xs, ones])
@@ -66,21 +78,21 @@ def calcEstimated(xs, ws):
     return estimates
 
 # Calculates the error of a 20 point segment
-def calcSegmentError(xs, ys, ws):
-    esimates = calcEstimated(xs, ws)
+def calcSegmentError(xs, ys, ws, func, unknown):
+    esimates = calcEstimated(xs, ws, func, unknown)
     diff = ys - esimates
     diffSquaredTotal = np.sum(diff ** 2)
     return diffSquaredTotal
 
 # Calculates the total error for every point
-def calcTotalError(xsSplit, ysSplit, wsList):
+def calcTotalError(xsSplit, ysSplit, wsList, func, unknown):
     total = 0
     for i in range(len(xsSplit)):
-        total += calcSegmentError(xsSplit[i], ysSplit[i], wsList[i])
+        total += calcSegmentError(xsSplit[i], ysSplit[i], wsList[i], func, unknown)
     return total
 
 # Plots a series of points on a scatter plot
-def plot(xs, ys, wsList):
+def plot(xs, ys, wsList, func):
     assert len(xs) == len(ys)
     assert len(xs) % 20 == 0
     len_data = len(xs)
@@ -90,10 +102,13 @@ def plot(xs, ys, wsList):
     plt.scatter(xs, ys, c = colour)
     for i in range(len(wsList)): # Plot a line for each line segment
         ws = wsList[i]
-        line = np.poly1d(ws.flatten()) # Polynomial
         xsLine = np.linspace(xs[i * 20], xs[i * 20 + 19], 1000)
-        ysLine = line(xsLine) # Polynomial
-        # ysLine = ws[0] * np.exp(xsLine) + ws[1] # Exponential
+        ysLine = np.array([])
+        if (func == "linear") | (func == "polynomial"):
+            line = np.poly1d(ws.flatten()) # Polynomial
+            ysLine = line(xsLine) # Polynomial
+        elif func == "exponential":
+            ysLine = ws[0] * np.exp(xsLine) + ws[1] # Exponential
         plt.plot(xsLine, ysLine)
     plt.show()
 
@@ -102,18 +117,21 @@ def main():
     xs, ys = loadPoints(sys.argv[1])
     xsSplit, ysSplit = splitPoints(xs, ys)
     wsList = []
-    
+
+    func = "linear"
+    unknown = None
+
     for i in range(len(xsSplit)):
-        ws = polynomialRegression(xsSplit[i], ysSplit[i])
+        ws = linearRegression(xsSplit[i], ysSplit[i])
         print(ws)
         wsList.append(ws)
     
-    error = calcTotalError(xsSplit, ysSplit, wsList)
+    error = calcTotalError(xsSplit, ysSplit, wsList, func, unknown)
     print(error)
 
     if len(sys.argv) == 3:
         if sys.argv[2] == "--plot":    
-            plot(xs, ys, wsList)
+            plot(xs, ys, wsList, func)
 
 if __name__ == "__main__":
     numOfArgs = len(sys.argv)

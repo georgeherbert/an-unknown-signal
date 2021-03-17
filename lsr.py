@@ -80,14 +80,15 @@ def calcSegmentError(xs, ys, ws, func):
     return diffSquaredTotal
 
 # Calculates the total error for every point
-def calcTotalError(xsSplit, ysSplit, wsList, func):
+def calcTotalError(xsSplit, ysSplit, wsList, funcsList):
     total = 0
     for i in range(len(xsSplit)):
-        total += calcSegmentError(xsSplit[i], ysSplit[i], wsList[i], func)
+        print(funcsList[i], wsList[i])
+        total += calcSegmentError(xsSplit[i], ysSplit[i], wsList[i], funcsList[i])
     return total
 
 # Plots a series of points on a scatter plot
-def plot(xs, ys, wsList, func):
+def plot(xs, ys, wsList, funcsList):
     assert len(xs) == len(ys)
     assert len(xs) % 20 == 0
     len_data = len(xs)
@@ -99,10 +100,10 @@ def plot(xs, ys, wsList, func):
         ws = wsList[i]
         xsLine = np.linspace(xs[i * 20], xs[i * 20 + 19], 1000)
         ysLine = np.array([])
-        if (func == "linear") | (func == "polynomial"):
+        if (funcsList[i] == "linear") | (funcsList[i] == "polynomial"):
             line = np.poly1d(ws.flatten()) # Polynomial
             ysLine = line(xsLine) # Polynomial
-        elif func == "exponential":
+        elif funcsList[i] == "exponential":
             ysLine = ws[0] * np.exp(xsLine) + ws[1] # Exponential
         plt.plot(xsLine, ysLine)
     plt.show()
@@ -112,23 +113,34 @@ def main():
     xs, ys = loadPoints(sys.argv[1])
     xsSplit, ysSplit = splitPoints(xs, ys)
     wsList = []
+    funcsList = []
 
-    funcs = ["linear", "polynomial", "exponential"]
+    funcOptions = ["linear", "polynomial", "exponential"]
 
-    func = "polynomial"
+    # func = "polynomial"
 
     for i in range(len(xsSplit)):
+        ws = np.array([])
+        funcUsed = ""
 
-        ws = regression(xsSplit[i], ysSplit[i], func)
-        print(ws)
+        smallestError = np.Inf
+        for func in funcOptions:
+            potentialWs = regression(xsSplit[i], ysSplit[i], func)
+            error = calcSegmentError(xsSplit[i], ysSplit[i], potentialWs, func)
+            if error < smallestError:
+                smallestError = error
+                ws = potentialWs
+                funcUsed = func
+
+        funcsList.append(funcUsed)
         wsList.append(ws)
     
-    error = calcTotalError(xsSplit, ysSplit, wsList, func)
+    error = calcTotalError(xsSplit, ysSplit, wsList, funcsList)
     print(error)
 
     if len(sys.argv) == 3:
         if sys.argv[2] == "--plot":    
-            plot(xs, ys, wsList, func)
+            plot(xs, ys, wsList, funcsList)
 
 if __name__ == "__main__":
     numOfArgs = len(sys.argv)

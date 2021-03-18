@@ -27,36 +27,96 @@ class LineSegment:
     def __init__(self, xs, ys):
         self.xs = xs
         self.ys = ys
-        
         self.numOfPoints = len(self.xs)
+        self.numTrainingPoints = 10
 
-    def splitTrainingValidation(self, numTraining):
+        # Split the data into training data and validation data
+        [
+            self.xsTraining,
+            self.ysTraining,
+            self.xsValidation,
+            self.ysValidation
+        ] = self.splitTrainingValidation()
+
+        # Get X values of each model from training data
+        self.XLinear = self.createXLinear()
+        self.XPolynomial = self.createXPolynomial()
+        self.XSinusoidal = self.createXSinusoidal()
+
+        # Get the weights of each model
+        self.wsLinear = self.regressionNormalEquation(self.XLinear)
+        self.wsPolynomial = self.regressionNormalEquation(self.XPolynomial)
+        self.wsSinusoidal = self.regressionNormalEquation(self.XSinusoidal)
+
+        # Calculate the cross-validation error of each model
+        self.errorLinear = self.calcErrorLinear()
+        self.errorPolynomial = self.calcErrorPolynomial()
+        self.errorSinusoidal = self.calcErrorSinusoidal()
+
+        # Calculate the best model
+        self.bestModel = self.calcBestModel()
+
+    # Splits the data into training and validation
+    def splitTrainingValidation(self):
         pos = np.random.permutation(self.numOfPoints)
         tempXs = self.xs[pos]
         tempYs = self.ys[pos]
 
-        self.xsTraining = tempXs[:numTraining]
-        self.ysTraining = tempYs[:numTraining]
-        self.xsValidation = tempXs[numTraining:]
-        self.ysValidation = tempYs[numTraining:]
+        xsTraining = tempXs[:self.numTrainingPoints]
+        ysTraining = tempYs[:self.numTrainingPoints]
+        xsValidation = tempXs[self.numTrainingPoints:]
+        ysValidation = tempYs[self.numTrainingPoints:]
 
-    def createLinearX(self):
-        ones = np.ones(self.numOfPoints, 1)
-        self.XLinear = np.hstack([self.xs, ones])
+        return xsTraining, ysTraining, xsValidation, ysValidation
+
+    # Returns the X values for linear regression
+    def createXLinear(self):
+        ones = np.ones((self.numTrainingPoints, 1))
+        return np.hstack([self.xsTraining, ones])
     
-    def createPolynomialX(self):
+    # Returns the X values for polynomial regression
+    def createXPolynomial(self):
         order = 3
         XPowersList = []
         for i in range(order + 1):
-            values = self.xs ** i
+            values = self.xsTraining ** i
             XPowersList.insert(0, values)
-        self.XPolynomial = np.hstack(XPowersList)
+        return np.hstack(XPowersList)
 
-    def createSinusoidalX(self):
-        ones = np.ones(self.numOfPoints, 1)
-        sinxs = np.sin(self.xs)
-        self.XSinusoidal = np.hstack([self.sinxs, ones])
+    # Returns the X values for sinusoidal regression
+    def createXSinusoidal(self):
+        ones = np.ones((self.numTrainingPoints, 1))
+        sinxs = np.sin(self.xsTraining)
+        return np.hstack([sinxs, ones])
 
+    # The normal equation for linear regression
+    def regressionNormalEquation(self, X):
+        ws = np.linalg.inv(X.T @ X) @ X.T @ self.ysTraining
+        return ws
+
+    def calcError(self, estimates):
+        diff = self.ysValidation - estimates
+        return np.sum(diff ** 2)
+
+    def calcErrorLinear(self):
+        estimates = self.wsLinear[0] * self.xsValidation + self.wsLinear[1]
+        return self.calcError(estimates)
+
+    def calcErrorPolynomial(self):
+        estimates = np.poly1d(self.wsPolynomial.flatten())(self.xsValidation)
+        return self.calcError(estimates)
+
+    def calcErrorSinusoidal(self):
+        estimates = self.wsSinusoidal[0] * np.sin(self.xsValidation) + self.wsSinusoidal[1]
+        return self.calcError(estimates)
+
+    def calcBestModel(self):
+        if (self.errorLinear <= self.errorPolynomial) & (self.errorLinear <= self.errorSinusoidal):
+            return "linear"
+        elif self.errorPolynomial <= self.errorSinusoidal:
+            return "polynomial"
+        else:
+            return "sinusoidal"
 
 # Loads points in from a given filename as a numpy array
 def loadPoints(filename):
@@ -171,7 +231,6 @@ def main():
     funcOptions = ["linear", "polynomial", "sine"]
 
     for segment in unknownSignal.segments:
-        segment.splitTrainingValidation(14)
 
         ws = np.array([])
         funcUsed = ""

@@ -65,29 +65,6 @@ def loadPoints(filename):
     ys = np.array([[y] for y in points[1].values])
     return xs, ys
 
-# Splits the x and y points into 20 point segments and returns them
-def splitPoints(xs, ys):
-    numSegments = len(xs) // 20
-    xsSplit = np.vsplit(xs, numSegments)
-    ysSplit = np.vsplit(ys, numSegments)
-    return xsSplit, ysSplit
-
-# Splits the set of xs or ys into training and validation
-def splitTrainingValidation(xsSplit, ysSplit):
-    xsSplitTraining = []
-    xsSplitValidation = []
-    ysSplitTraining = []
-    ysSplitValidation = []
-    for i in range(len(xsSplit)):
-        pos = np.random.permutation(len(xsSplit[i]))
-        xsSplit[i] = xsSplit[i][pos]
-        ysSplit[i] = ysSplit[i][pos]
-        xsSplitTraining.append(xsSplit[i][:10])
-        xsSplitValidation.append(xsSplit[i][10:])
-        ysSplitTraining.append(ysSplit[i][:10])
-        ysSplitValidation.append(ysSplit[i][10:])
-    return xsSplitTraining, xsSplitValidation, ysSplitTraining, ysSplitValidation
-
 # Returns the weights from regression
 def regressionNormalEquation(X, y):
     return np.linalg.inv(X.T @ X) @ X.T @ y 

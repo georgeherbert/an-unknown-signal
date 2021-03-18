@@ -11,14 +11,19 @@ class UnknownSignal:
         self.numPoints = len(self.xs)
         self.numSegments = int(self.numPoints / 20)
 
+        self.segments = self.splitIntoSegments()
+
+        self.totalError = self.calcTotalError()
+        print(self.totalError)
+
     def splitIntoSegments(self):
         xsSplit = np.vsplit(self.xs, self.numSegments)
         ysSplit = np.vsplit(self.ys, self.numSegments)
+        return [LineSegment(xsSplit[i], ysSplit[i]) for i in range(self.numSegments)]
 
-        self.segments = []
-        for i in range(self.numSegments):
-            lineSegment = LineSegment(xsSplit[i], ysSplit[i])
-            self.segments.append(lineSegment)
+    def calcTotalError(self):
+        return np.sum([segment.totalError for segment in self.segments])
+
 
     def getSegment(self, i):
         return self.segments[i]
@@ -55,6 +60,9 @@ class LineSegment:
 
         # Calculate the best model
         self.bestModel = self.calcBestModel()
+
+        # Calculate the total error of the best model
+        self.totalError = self.calcTotalError()
 
     # Splits the data into training and validation
     def splitTrainingValidation(self):
@@ -95,24 +103,24 @@ class LineSegment:
         return ws
 
     # Returns the cross-validation error for a given set of estimates
-    def calcError(self, estimates):
+    def calcCrossValidationError(self, estimates):
         diff = self.ysValidation - estimates
         return np.sum(diff ** 2)
 
     # Returns the cross-validation error for linear model
     def calcErrorLinear(self):
         estimates = self.wsLinear[0] * self.xsValidation + self.wsLinear[1]
-        return self.calcError(estimates)
+        return self.calcCrossValidationError(estimates)
 
     # Returns the cross-validation error for polynomial model
     def calcErrorPolynomial(self):
         estimates = np.poly1d(self.wsPolynomial.flatten())(self.xsValidation)
-        return self.calcError(estimates)
+        return self.calcCrossValidationError(estimates)
 
     # Returns the cross-validation error for sinusoidal model
     def calcErrorSinusoidal(self):
         estimates = self.wsSinusoidal[0] * np.sin(self.xsValidation) + self.wsSinusoidal[1]
-        return self.calcError(estimates)
+        return self.calcCrossValidationError(estimates)
 
     # Returns the best model (i.e. the one with the lowest cross-validation error)
     def calcBestModel(self):
@@ -122,6 +130,21 @@ class LineSegment:
             return "polynomial"
         else:
             return "sinusoidal"
+
+    # Calculates the total error of the best model
+    def calcTotalError(self):
+        estimates = np.array([])
+        if self.bestModel == "linear":
+            estimates = self.wsLinear[0] * self.xs + self.wsLinear[1]
+        elif self.bestModel == "polynomial":
+            estimates = np.poly1d(self.wsPolynomial.flatten())(self.xs)
+        elif self.bestModel == "sinusoidal":
+            estimates = self.wsSinusoidal[0] * np.sin(self.xs) + self.wsSinusoidal[1]
+        diff = self.ys - estimates
+        return np.sum(diff ** 2)
+
+    
+
 
 # Loads points in from a given filename as a numpy array
 def loadPoints(filename):
@@ -200,7 +223,8 @@ def calcTotalError(xsSplit, ysSplit, wsList, funcsList):
     total = 0
     for i in range(len(xsSplit)):
         # print(funcsList[i], wsList[i])
-        total += calcSegmentError(xsSplit[i], ysSplit[i], wsList[i], funcsList[i])
+        error = calcSegmentError(xsSplit[i], ysSplit[i], wsList[i], funcsList[i])
+        total += error 
     return total
 
 # Plots a series of points on a scatter plot
@@ -228,7 +252,6 @@ def plot(xs, ys, wsList, funcsList):
 def main():
     xs, ys = loadPoints(sys.argv[1])
     unknownSignal = UnknownSignal(xs, ys)
-    unknownSignal.splitIntoSegments()
 
     wsList = []
     funcsList = []

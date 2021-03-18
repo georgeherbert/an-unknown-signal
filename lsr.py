@@ -94,22 +94,27 @@ class LineSegment:
         ws = np.linalg.inv(X.T @ X) @ X.T @ self.ysTraining
         return ws
 
+    # Returns the cross-validation error for a given set of estimates
     def calcError(self, estimates):
         diff = self.ysValidation - estimates
         return np.sum(diff ** 2)
 
+    # Returns the cross-validation error for linear model
     def calcErrorLinear(self):
         estimates = self.wsLinear[0] * self.xsValidation + self.wsLinear[1]
         return self.calcError(estimates)
 
+    # Returns the cross-validation error for polynomial model
     def calcErrorPolynomial(self):
         estimates = np.poly1d(self.wsPolynomial.flatten())(self.xsValidation)
         return self.calcError(estimates)
 
+    # Returns the cross-validation error for sinusoidal model
     def calcErrorSinusoidal(self):
         estimates = self.wsSinusoidal[0] * np.sin(self.xsValidation) + self.wsSinusoidal[1]
         return self.calcError(estimates)
 
+    # Returns the best model (i.e. the one with the lowest cross-validation error)
     def calcBestModel(self):
         if (self.errorLinear <= self.errorPolynomial) & (self.errorLinear <= self.errorSinusoidal):
             return "linear"

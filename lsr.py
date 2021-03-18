@@ -188,15 +188,13 @@ def main():
     unknownSignal = UnknownSignal(xs, ys)
     unknownSignal.splitIntoSegments()
 
-    for segment in unknownSignal.segments:
-        segment.splitTrainingValidation(10)
-
     wsList = []
     funcsList = []
 
     funcOptions = ["linear", "polynomial", "sine"]
 
     for segment in unknownSignal.segments:
+        segment.splitTrainingValidation(14)
 
         ws = np.array([])
         funcUsed = ""
@@ -216,8 +214,8 @@ def main():
     
     print(funcsList)
 
-    # error = calcTotalError(unknownSignal.segments, wsList, funcsList)
-    # print(error)
+    error = calcTotalError([segment.xs for segment in unknownSignal.segments], [segment.ys for segment in unknownSignal.segments], wsList, funcsList)
+    print(error)
 
     if len(sys.argv) == 3:
         if sys.argv[2] == "--plot":    

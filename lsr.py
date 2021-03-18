@@ -3,6 +3,61 @@ import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
 
+class UnknownSignal:
+    def __init__(self, xs, ys):
+        self.xs = xs
+        self.ys = ys
+        
+        self.numPoints = len(self.xs)
+        self.numSegments = int(self.numPoints / 20)
+
+    def splitIntoSegments(self):
+        xsSplit = np.vsplit(self.xs, self.numSegments)
+        ysSplit = np.vsplit(self.ys, self.numSegments)
+
+        self.segments = []
+        for i in range(self.numSegments):
+            lineSegment = LineSegment(xsSplit[i], ysSplit[i])
+            self.segments.append(lineSegment)
+
+    def getSegment(self, i):
+        return self.segments[i]
+    
+class LineSegment:
+    def __init__(self, xs, ys):
+        self.xs = xs
+        self.ys = ys
+        
+        self.numOfPoints = len(self.xs)
+
+    def splitTrainingValidation(self, numTraining):
+        pos = np.random.permutation(self.numOfPoints)
+        tempXs = self.xs[pos]
+        tempYs = self.ys[pos]
+
+        self.xsTraining = tempXs[:numTraining]
+        self.ysTraining = tempYs[:numTraining]
+        self.xsValidation = tempXs[numTraining:]
+        self.ysValidation = tempYs[numTraining:]
+
+    def createLinearX(self):
+        ones = np.ones(self.numOfPoints, 1)
+        self.XLinear = np.hstack([self.xs, ones])
+    
+    def createPolynomialX(self):
+        order = 3
+        XPowersList = []
+        for i in range(order + 1):
+            values = self.xs ** i
+            XPowersList.insert(0, values)
+        self.XPolynomial = np.hstack(XPowersList)
+
+    def createSinusoidalX(self):
+        ones = np.ones(self.numOfPoints, 1)
+        sinxs = np.sin(self.xs)
+        self.XSinusoidal = np.hstack([self.sinxs, ones])
+
+
 # Loads points in from a given filename as a numpy array
 def loadPoints(filename):
     points = pd.read_csv(filename, header=None)
@@ -130,22 +185,26 @@ def plot(xs, ys, wsList, funcsList):
 # Main function
 def main():
     xs, ys = loadPoints(sys.argv[1])
-    xsSplit, ysSplit = splitPoints(xs, ys)
-    xsSplitTraining, xsSplitValidation, ysSplitTraining, ysSplitValidation = splitTrainingValidation(xsSplit, ysSplit)
+    unknownSignal = UnknownSignal(xs, ys)
+    unknownSignal.splitIntoSegments()
+
+    for segment in unknownSignal.segments:
+        segment.splitTrainingValidation(10)
 
     wsList = []
     funcsList = []
 
     funcOptions = ["linear", "polynomial", "sine"]
 
-    for i in range(len(xsSplit)):
+    for segment in unknownSignal.segments:
+
         ws = np.array([])
         funcUsed = ""
 
         smallestError = np.Inf
         for func in funcOptions:
-            potentialWs = regression(xsSplitTraining[i], ysSplitTraining[i], func)
-            error = calcSegmentError(xsSplitValidation[i], ysSplitValidation[i], potentialWs, func)
+            potentialWs = regression(segment.xsTraining, segment.ysTraining, func)
+            error = calcSegmentError(segment.xsValidation, segment.ysValidation, potentialWs, func)
             # print(f"{func}: {error}")
             if error < smallestError:
                 smallestError = error
@@ -157,8 +216,8 @@ def main():
     
     print(funcsList)
 
-    error = calcTotalError(xsSplit, ysSplit, wsList, funcsList)
-    print(error)
+    # error = calcTotalError(unknownSignal.segments, wsList, funcsList)
+    # print(error)
 
     if len(sys.argv) == 3:
         if sys.argv[2] == "--plot":    

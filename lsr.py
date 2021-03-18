@@ -172,7 +172,11 @@ def loadPoints(filename):
 # Main function
 def main():
     xs, ys = loadPoints(sys.argv[1])
-    unknownSignal = UnknownSignal(xs, ys, True)
+    plot = False
+    if len(sys.argv) >= 3:
+        plot = (sys.argv[2] == "--plot")
+
+    unknownSignal = UnknownSignal(xs, ys, plot)
 
 if __name__ == "__main__":
     numOfArgs = len(sys.argv)

@@ -16,6 +16,8 @@ class UnknownSignal:
         self.totalError = self.calcTotalError()
         print(self.totalError)
 
+        self.plot()
+
     def splitIntoSegments(self):
         xsSplit = np.vsplit(self.xs, self.numSegments)
         ysSplit = np.vsplit(self.ys, self.numSegments)
@@ -26,6 +28,12 @@ class UnknownSignal:
 
     def getSegment(self, i):
         return self.segments[i]
+
+    def plot(self):
+        colour = np.concatenate([[i] * 20 for i in range(self.numSegments)])
+        plt.scatter(self.xs, self.ys, c = colour)
+        [segment.plot() for segment in self.segments]
+        plt.show()
     
 class LineSegment:
     def __init__(self, xs, ys):
@@ -142,8 +150,16 @@ class LineSegment:
         diff = self.ys - estimates
         return np.sum(diff ** 2)
 
-    
-
+    def plot(self):
+        xsLine = np.linspace(self.xs[0], self.xs[-1], 1000)
+        ysLine = np.array([])
+        if self.bestModel == "linear":
+            ysLine = self.wsLinear[0] * xsLine + self.wsLinear[1]
+        elif self.bestModel == "polynomial":
+            ysLine = np.poly1d(self.wsPolynomial.flatten())(xsLine)
+        elif self.bestModel == "sinusoidal":
+            ysLine = self.wsSinusoidal[0] * np.sin(xsLine) + self.wsSinusoidal[1]
+        plt.plot(xsLine, ysLine)
 
 # Loads points in from a given filename as a numpy array
 def loadPoints(filename):

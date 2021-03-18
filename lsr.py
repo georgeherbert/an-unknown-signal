@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 class UnknownSignal:
-    def __init__(self, xs, ys):
+    def __init__(self, xs, ys, plot):
         self.xs = xs
         self.ys = ys
         
@@ -16,7 +16,8 @@ class UnknownSignal:
         self.totalError = self.calcTotalError()
         print(self.totalError)
 
-        self.plot()
+        if plot:
+            self.plot()
 
     def splitIntoSegments(self):
         xsSplit = np.vsplit(self.xs, self.numSegments)
@@ -168,137 +169,10 @@ def loadPoints(filename):
     ys = np.array([[y] for y in points[1].values])
     return xs, ys
 
-# Returns the weights from regression
-def regressionNormalEquation(X, y):
-    return np.linalg.inv(X.T @ X) @ X.T @ y 
-    # return np.linalg.solve(X.T @ X, X.T @ y) # Not sure if the shape of the regulariser is correct
-
-# Linear regression
-def linearRegression(xs, y):
-    ones = np.ones((len(xs), 1))
-    X = np.hstack([xs, ones])
-    ws = regressionNormalEquation(X, y)
-    return ws
-
-# Calculates the x to the power of values for the equation
-def calcXPowers(xs, order):
-    XPowersList = []
-    for i in range(order + 1):
-        values = xs ** i
-        XPowersList.insert(0, values)
-    XPowers = np.hstack(XPowersList)
-    return XPowers
-
-# Returns the weights of polynomialRegression regression
-def polynomialRegression(xs, y):
-    X = calcXPowers(xs, 3)
-    ws = regressionNormalEquation(X, y)
-    return ws
-
-# Returns the weight of sinusoidal regression
-def sinusoidalRegression(xs, y):
-    ones = np.ones((len(xs), 1))
-    sinxs = np.sin(xs)
-    X = np.hstack([sinxs, ones])
-    ws = regressionNormalEquation(X, y)
-    return ws
-
-# Performs a specific type of regression based on the function type givenn
-def regression(xs, y, func):
-    ws = np.array([])
-    if func == "linear":
-        ws = linearRegression(xs, y)
-    elif func == "polynomial":
-        ws = polynomialRegression(xs, y)
-    elif func == "sine":
-        ws = sinusoidalRegression(xs, y)
-    return ws
-
-# Calculates the estimated points based on the lines
-def calcEstimated(xs, ws, func):
-    estimates = np.array([])
-    if func == "linear":
-        estimates = ws[0] * xs + ws[1]
-    elif func == "polynomial":
-        line = np.poly1d(ws.flatten())
-        estimates = line(xs)
-    elif func == "sine":
-        estimates = ws[0] * np.sin(xs) + ws[1]
-    return estimates
-
-# Calculates the error of a 20 point segment
-def calcSegmentError(xs, ys, ws, func):
-    esimates = calcEstimated(xs, ws, func)
-    diff = ys - esimates
-    diffSquaredTotal = np.sum(diff ** 2)
-    return diffSquaredTotal
-
-# Calculates the total error for every point
-def calcTotalError(xsSplit, ysSplit, wsList, funcsList):
-    total = 0
-    for i in range(len(xsSplit)):
-        # print(funcsList[i], wsList[i])
-        error = calcSegmentError(xsSplit[i], ysSplit[i], wsList[i], funcsList[i])
-        total += error 
-    return total
-
-# Plots a series of points on a scatter plot
-def plot(xs, ys, wsList, funcsList):
-    assert len(xs) == len(ys)
-    assert len(xs) % 20 == 0
-    len_data = len(xs)
-    num_segments = len_data // 20
-    colour = np.concatenate([[i] * 20 for i in range(num_segments)])
-    plt.set_cmap('Dark2')
-    plt.scatter(xs, ys, c = colour)
-    for i in range(len(wsList)): # Plot a line for each line segment
-        ws = wsList[i]
-        xsLine = np.linspace(xs[i * 20], xs[i * 20 + 19], 1000)
-        ysLine = np.array([])
-        if (funcsList[i] == "linear") | (funcsList[i] == "polynomial"):
-            line = np.poly1d(ws.flatten()) # Polynomial
-            ysLine = line(xsLine) # Polynomial
-        elif funcsList[i] == "sine":
-            ysLine = ws[0] * np.sin(xsLine) + ws[1] # Sine
-        plt.plot(xsLine, ysLine)
-    plt.show()
-
 # Main function
 def main():
     xs, ys = loadPoints(sys.argv[1])
-    unknownSignal = UnknownSignal(xs, ys)
-
-    wsList = []
-    funcsList = []
-
-    funcOptions = ["linear", "polynomial", "sine"]
-
-    for segment in unknownSignal.segments:
-
-        ws = np.array([])
-        funcUsed = ""
-
-        smallestError = np.Inf
-        for func in funcOptions:
-            potentialWs = regression(segment.xsTraining, segment.ysTraining, func)
-            error = calcSegmentError(segment.xsValidation, segment.ysValidation, potentialWs, func)
-            # print(f"{func}: {error}")
-            if error < smallestError:
-                smallestError = error
-                ws = potentialWs
-                funcUsed = func
-
-        funcsList.append(funcUsed)
-        wsList.append(ws)
-    
-    print(funcsList)
-
-    error = calcTotalError([segment.xs for segment in unknownSignal.segments], [segment.ys for segment in unknownSignal.segments], wsList, funcsList)
-    print(error)
-
-    if len(sys.argv) == 3:
-        if sys.argv[2] == "--plot":    
-            plot(xs, ys, wsList, funcsList)
+    unknownSignal = UnknownSignal(xs, ys, True)
 
 if __name__ == "__main__":
     numOfArgs = len(sys.argv)

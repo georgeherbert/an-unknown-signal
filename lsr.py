@@ -19,17 +19,17 @@ class UnknownSignal:
         if plot:
             self.plot()
 
+    # Returns a list of 20-point segments for an unknown signal
     def splitIntoSegments(self):
         xsSplit = np.vsplit(self.xs, self.numSegments)
         ysSplit = np.vsplit(self.ys, self.numSegments)
         return [LineSegment(xsSplit[i], ysSplit[i]) for i in range(self.numSegments)]
 
+    # Returns the total error of the unknown signal
     def calcTotalError(self):
         return np.sum([segment.totalError for segment in self.segments])
 
-    def getSegment(self, i):
-        return self.segments[i]
-
+    # Plot every point of the unknown signal and the lines for each segment
     def plot(self):
         colour = np.concatenate([[i] * 20 for i in range(self.numSegments)])
         plt.scatter(self.xs, self.ys, c = colour)
@@ -151,6 +151,7 @@ class LineSegment:
         diff = self.ys - estimates
         return np.sum(diff ** 2)
 
+    # Plot the line for the line segment
     def plot(self):
         xsLine = np.linspace(self.xs[0], self.xs[-1], 1000)
         ysLine = np.array([])

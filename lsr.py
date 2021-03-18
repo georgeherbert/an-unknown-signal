@@ -9,7 +9,7 @@ class UnknownSignal:
         self.ys = ys
         
         self.numPoints = len(self.xs)
-        self.numSegments = int(self.numPoints / 20)
+        self.numSegments = self.numPoints // 20
 
         self.segments = self.splitIntoSegments()
 
@@ -23,7 +23,6 @@ class UnknownSignal:
 
     def calcTotalError(self):
         return np.sum([segment.totalError for segment in self.segments])
-
 
     def getSegment(self, i):
         return self.segments[i]

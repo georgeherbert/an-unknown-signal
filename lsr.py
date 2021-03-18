@@ -41,7 +41,7 @@ class LineSegment:
         self.xs = xs
         self.ys = ys
         self.numOfPoints = len(self.xs)
-        self.numTrainingPoints = 10
+        self.numTrainingPoints = 14
 
         # Split the data into training data and validation data
         [

@@ -19,11 +19,8 @@ $\vb{y} = \vb{X}\vb{w} + \vb{\epsilon}$ where $\epsilon_{i} \sim \mathcal{N}(0, 
 the maximum likelihood esimation is equivalent to the least square 
 error estimation and is given by the equation
 \[
-    \vb{\hat{w}} = (\vb{X^{T}}\vb{X})^{-1}\vb{X^{T}}\vb{y}
+    \vb{\hat{w}} = (\vb{X^{T}}\vb{X})^{-1}\vb{X^{T}}\vb{y}.
 \]
-where $\vb{\hat{w}}$ provides the maximum likelihood estimation of the
-weights for my data, $\vb{y}$ is the output vector, and $\vb{X}$ is 
-the input vector.
 
 I've implemented this equation in my code as the following to calculate
 the maximum likelihood estimation for my training data:

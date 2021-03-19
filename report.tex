@@ -47,7 +47,14 @@ In the case of linear regeression, overfitting typically occurs
 when the model produced contains too complex a function class,
 such that it would fail to predict future observations.
 
-To prevent overfitting, I have used K-Fold cross regularisation.
+To prevent overfitting, I have used $k$-fold cross-validation
+for each line segment, the process for which is as follows:
+
+\begin{enumerate}
+    \item Shuffle the dataset
+    \item Split the dataset provided into $k$ equally sized subsamples
+    \item Perform cross-validation $k$ times, using each subsample exactly once as the validation data
+\end{enumerate}
 
 \section{Procedure for determining function}
 

@@ -57,7 +57,7 @@ splitting each 20-point segment into $k$ evenly-sized subsamples,
 as implemented in the \texttt{getKFold()} method.
 Then, each subsample is used exactly once as validation data,
 whilst the other $k - 1$ paritions are used as training data.
-Finally, the cross-validation error for each model is calculated
+The cross-validation error for each model is calculated
 as follows \cite{EOSL}:
 \[
     CV({\hat{f}}) = \frac{1}{N}\sum_{i = 1}^{N}SSE(y_{i}, \hat{f}_{i}(x_{i}))

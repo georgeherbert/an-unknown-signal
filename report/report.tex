@@ -46,29 +46,41 @@ In the case of linear regeression, overfitting typically occurs
 when the model produced contains too complex a function class,
 such that it would fail to predict future observations.
 
-Cross-validation can be used to detect overfitting. We can partition
-our data into two subsets: a training set and a validation set;
+To prevent overfitting each line segment, I have used a type of 
+cross-validation known as $k$-fold cross-validation---in particular,
+I have used 5-fold cross-validation. 
+I opted to use $k$-fold cross-validation due to the small number
+of datapoints in each segment.
 
-
-To prevent overfitting, I have used $k$-fold cross-validation
-for each line segment, the process for which is as follows:
-
-\begin{enumerate}
-    \item Shuffle the dataset
-    \item Split the dataset provided into $k$ equally sized subsamples
-    \item Perform cross-validation $k$ times, using each subsample exactly once as the validation data
-\end{enumerate}
+To begin with, $k$-fold cross-validation involves shuffling and 
+splitting each 20-point segment into $k$ evenly-sized subsamples,
+as implemented in the \texttt{getKFold()} method.
+Then, each subsample is used exactly once as validation data,
+whilst the other $k - 1$ paritions are used as training data.
+Finally, the cross-validation error for each model is calculated
+as follows \cite{EOSL}:
+\[
+    CV({\hat{f}}) = \frac{1}{N}\sum_{i = 1}^{N}SSE(y_{i}, \hat{f}_{i}(x_{i}))
+\]
+where
+$\hat{f}$ is a given model;
+$\hat{f}_{i}$ the fitted function, trained with the $i$-th subsample removed;
+$N$ is the number of folds (in this case 5);
+$SSE$ is the sum squared error function;
+$y_{i}$ are the y datapoints of subsample $i$;
+and $x_{i}$ are the x datapoints of subsample $i$.
+The model with the lowest cross-validation error is then selected.
 
 \section{Procedure for determining function}
 
 \section{Testing}
 
-
-
-
-
-
-
-
+\begin{thebibliography}{9}
+    \bibitem{EOSL} 
+    Hastie, T., Tibshirani, R. and Friedman, J. (2001)
+    \textit{The Elements of Statistical Learning: Data Mining, Inference, and Prediction}. 
+    2nd ed. New York: Springer.
+\end{thebibliography}
+    
 
 \end{document}

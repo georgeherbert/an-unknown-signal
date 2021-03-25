@@ -1,7 +1,9 @@
 import sys
+import os.path
+import argparse
 import pandas as pd
 import numpy as np
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 
 class UnknownSignal:
     def __init__(self, xs, ys, plot):
@@ -203,19 +205,15 @@ def loadPoints(filename):
     ys = np.array([[y] for y in points[1].values])
     return xs, ys
 
-# Main function
-def main():
-    xs, ys = loadPoints(sys.argv[1])
-    plot = False
-    if len(sys.argv) >= 3:
-        plot = (sys.argv[2] == "--plot")
-
-    unknownSignal = UnknownSignal(xs, ys, plot)
-
 if __name__ == "__main__":
-    numOfArgs = len(sys.argv)
-    if ((numOfArgs == 2) | (numOfArgs == 3)):
-        main()
-        print("")
-    else:
-        print("Invalid argument(s)")
+    parser = argparse.ArgumentParser(description = "An Unknown Signal")
+    parser.add_argument("file", metavar = "file", type = str, help = "file name")
+    parser.add_argument("--plot", action = "store_true", help = "plot the signal")
+    args = parser.parse_args()
+
+    if not os.path.exists(args.file):
+        print(f"File '{args.file}' does not exist.")
+        sys.exit()
+        
+    xs, ys = loadPoints(args.file)
+    UnknownSignal(xs, ys, args.plot)

@@ -106,7 +106,7 @@ class FullLineSegment(LineSegment):
 
         # The best model, the weights and the total error
         self.bestModel = self.calcBestModel()
-        print(self.bestModel)
+        print(self.bestModel) # For testing purposes only
         self.ws = self.calcWeights()
         self.totalError = self.calcTotalError()
 

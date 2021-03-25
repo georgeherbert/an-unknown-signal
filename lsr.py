@@ -33,7 +33,7 @@ class UnknownSignal:
 
     # Outputs the total error of the unknown signal
     def outputTotalError(self):
-        print(np.sum([segment.totalError for segment in self.segments]))
+        print(np.sum([segment.totalError for segment in self.segments]), "\n")
 
     # Plot every point of the unknown signal and the lines for each segment
     def plot(self):
@@ -214,6 +214,6 @@ if __name__ == "__main__":
     if not os.path.exists(args.file):
         print(f"File '{args.file}' does not exist.")
         sys.exit()
-        
+
     xs, ys = loadPoints(args.file)
     UnknownSignal(xs, ys, args.plot)

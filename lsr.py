@@ -13,8 +13,7 @@ class UnknownSignal:
 
         self.segments = self.splitIntoSegments()
 
-        self.totalError = self.calcTotalError()
-        print(self.totalError)
+        self.outputTotalError()
 
         if plot:
             self.plot()
@@ -25,9 +24,9 @@ class UnknownSignal:
         ysSplit = np.vsplit(self.ys, self.numSegments)
         return [FullLineSegment(xsSplit[i], ysSplit[i]) for i in range(self.numSegments)]
 
-    # Returns the total error of the unknown signal
-    def calcTotalError(self):
-        return np.sum([segment.totalError for segment in self.segments])
+    # Outputs the total error of the unknown signal
+    def outputTotalError(self):
+        print(np.sum([segment.totalError for segment in self.segments]))
 
     # Plot every point of the unknown signal and the lines for each segment
     def plot(self):
@@ -37,9 +36,30 @@ class UnknownSignal:
         plt.show()
     
 class LineSegment:
+    # The regression normal equation
     def regressionNormalEquation(self, X, y):
         ws = np.linalg.inv(X.T @ X) @ X.T @ y
         return ws
+
+    # Returns the X values for linear regression
+    def createXLinear(self, xs):
+        ones = np.ones((len(xs), 1))
+        return np.hstack([xs, ones])
+    
+    # Returns the X values for polynomial regression
+    def createXPolynomial(self, xs):
+        order = 3
+        XPowersList = []
+        for i in range(order + 1):
+            values = xs ** i
+            XPowersList.insert(0, values)
+        return np.hstack(XPowersList)
+
+    # Returns the X values for sinusoidal regression
+    def createXSinusoidal(self, xs):
+        ones = np.ones((len(xs), 1))
+        sinxs = np.sin(xs)
+        return np.hstack([sinxs, ones])
 
 class FullLineSegment(LineSegment):
     def __init__(self, xs, ys):
@@ -95,19 +115,18 @@ class FullLineSegment(LineSegment):
             return "sinusoidal"
 
     def calcWeights(self):
-        temp = Partition(self.xs, np.array([]), self.ys, np.array([]))
-        ws = np.array([])
         if self.bestModel == "linear":
-            ws = temp.wsLinear
+            X = self.createXLinear(self.xs)
+            return self.regressionNormalEquation(X, self.ys)
         elif self.bestModel == "polynomial":
-            ws = temp.wsPolynomial
+            X = self.createXPolynomial(self.xs)
+            return self.regressionNormalEquation(X, self.ys)
         elif self.bestModel == "sinusoidal":
-            ws = temp.wsSinusoidal
-        return ws
+            X = self.createXSinusoidal(self.xs)
+            return self.regressionNormalEquation(X, self.ys)
 
     # Calculates the total error of the best model
     def calcTotalError(self):
-        estimates = np.array([])
         if self.bestModel == "linear":
             estimates = self.ws[0] * self.xs + self.ws[1]
         elif self.bestModel == "polynomial":
@@ -120,7 +139,6 @@ class FullLineSegment(LineSegment):
     # Plot the line for the line segment
     def plot(self):
         xsLine = np.linspace(self.xs[0], self.xs[-1], 1000)
-        ysLine = np.array([])
         if self.bestModel == "linear":
             ysLine = self.ws[0] * xsLine + self.ws[1]
         elif self.bestModel == "polynomial":
@@ -140,9 +158,9 @@ class Partition(LineSegment):
         self.numTrainingPoints = len(self.xsTraining)
 
         # Get X values of each model from training data
-        self.XLinear = self.createXLinear()
-        self.XPolynomial = self.createXPolynomial()
-        self.XSinusoidal = self.createXSinusoidal()
+        self.XLinear = self.createXLinear(self.xsTraining)
+        self.XPolynomial = self.createXPolynomial(self.xsTraining)
+        self.XSinusoidal = self.createXSinusoidal(self.xsTraining)
 
         # Get the weights of each model
         self.wsLinear = self.regressionNormalEquation(self.XLinear, self.ysTraining)
@@ -153,26 +171,6 @@ class Partition(LineSegment):
         self.errorLinear = self.calcErrorLinear()
         self.errorPolynomial = self.calcErrorPolynomial()
         self.errorSinusoidal = self.calcErrorSinusoidal()
-
-    # Returns the X values for linear regression
-    def createXLinear(self):
-        ones = np.ones((self.numTrainingPoints, 1))
-        return np.hstack([self.xsTraining, ones])
-    
-    # Returns the X values for polynomial regression
-    def createXPolynomial(self):
-        order = 3
-        XPowersList = []
-        for i in range(order + 1):
-            values = self.xsTraining ** i
-            XPowersList.insert(0, values)
-        return np.hstack(XPowersList)
-
-    # Returns the X values for sinusoidal regression
-    def createXSinusoidal(self):
-        ones = np.ones((self.numTrainingPoints, 1))
-        sinxs = np.sin(self.xsTraining)
-        return np.hstack([sinxs, ones])
 
     # Returns the sum squared error for a given set of estimates
     def calcSumSquaredError(self, estimates):

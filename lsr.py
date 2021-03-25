@@ -23,7 +23,7 @@ class UnknownSignal:
     def splitIntoSegments(self):
         xsSplit = np.vsplit(self.xs, self.numSegments)
         ysSplit = np.vsplit(self.ys, self.numSegments)
-        return [LineSegment(xsSplit[i], ysSplit[i]) for i in range(self.numSegments)]
+        return [FullLineSegment(xsSplit[i], ysSplit[i]) for i in range(self.numSegments)]
 
     # Returns the total error of the unknown signal
     def calcTotalError(self):
@@ -37,6 +37,11 @@ class UnknownSignal:
         plt.show()
     
 class LineSegment:
+    def regressionNormalEquation(self, X, y):
+        ws = np.linalg.inv(X.T @ X) @ X.T @ y
+        return ws
+
+class FullLineSegment(LineSegment):
     def __init__(self, xs, ys):
         self.xs = xs
         self.ys = ys
@@ -124,7 +129,7 @@ class LineSegment:
             ysLine = self.ws[0] * np.sin(xsLine) + self.ws[1]
         plt.plot(xsLine, ysLine)
 
-class Partition:
+class Partition(LineSegment):
     def __init__(self, xsTraining, xsValidation, ysTraining, ysValidation):
         # The training and validation data for a given partition
         self.xsTraining = xsTraining
@@ -140,9 +145,9 @@ class Partition:
         self.XSinusoidal = self.createXSinusoidal()
 
         # Get the weights of each model
-        self.wsLinear = self.regressionNormalEquation(self.XLinear)
-        self.wsPolynomial = self.regressionNormalEquation(self.XPolynomial)
-        self.wsSinusoidal = self.regressionNormalEquation(self.XSinusoidal)
+        self.wsLinear = self.regressionNormalEquation(self.XLinear, self.ysTraining)
+        self.wsPolynomial = self.regressionNormalEquation(self.XPolynomial, self.ysTraining)
+        self.wsSinusoidal = self.regressionNormalEquation(self.XSinusoidal, self.ysTraining)
 
         # Calculate the sum squared error error of each model
         self.errorLinear = self.calcErrorLinear()
@@ -169,11 +174,6 @@ class Partition:
         sinxs = np.sin(self.xsTraining)
         return np.hstack([sinxs, ones])
 
-    # The normal equation for linear regression
-    def regressionNormalEquation(self, X):
-        ws = np.linalg.inv(X.T @ X) @ X.T @ self.ysTraining
-        return ws
-
     # Returns the sum squared error for a given set of estimates
     def calcSumSquaredError(self, estimates):
         diff = self.ysValidation - estimates
@@ -182,15 +182,6 @@ class Partition:
     # Returns the sum squared error error for linear model
     def calcErrorLinear(self):
         estimates = self.wsLinear[0] * self.xsValidation + self.wsLinear[1]
-        # print("WS")
-        # print(self.wsLinear)
-        # print("YS VAL")
-        # print(self.ysValidation)
-        # print("XS VAL")
-        # print(self.xsValidation)
-
-
-
         return self.calcSumSquaredError(estimates)
 
     # Returns the sum squared error error for polynomial model

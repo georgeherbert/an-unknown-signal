@@ -61,6 +61,26 @@ class LineSegment:
         sinxs = np.sin(xs)
         return np.hstack([sinxs, ones])
 
+    # Returns the sum squared error for a given set of estimates
+    def calcSumSquaredError(self, actual, estimates):
+        diff = actual - estimates
+        return np.sum(diff ** 2)
+
+    # Returns the sum squared error error for a linear model
+    def calcErrorLinear(self, xs, ys, ws):
+        estimates = ws[0] * xs + ws[1]
+        return self.calcSumSquaredError(estimates, ys)
+
+    # Returns the sum squared error error for a polynomial model
+    def calcErrorPolynomial(self, xs, ys, ws):
+        estimates = np.poly1d(ws.flatten())(xs)
+        return self.calcSumSquaredError(estimates, ys)
+
+    # Returns the sum squared error for a sinusoidal model
+    def calcErrorSinusoidal(self, xs, ys, ws):
+        estimates = ws[0] * np.sin(xs) + ws[1]
+        return self.calcSumSquaredError(estimates, ys)
+
 class FullLineSegment(LineSegment):
     def __init__(self, xs, ys):
         self.xs = xs
@@ -114,6 +134,7 @@ class FullLineSegment(LineSegment):
         else:
             return "sinusoidal"
 
+    # Calculate the weights using the best model
     def calcWeights(self):
         if self.bestModel == "linear":
             X = self.createXLinear(self.xs)
@@ -128,13 +149,11 @@ class FullLineSegment(LineSegment):
     # Calculates the total error of the best model
     def calcTotalError(self):
         if self.bestModel == "linear":
-            estimates = self.ws[0] * self.xs + self.ws[1]
+            return self.calcErrorLinear(self.xs, self.ys, self.ws)
         elif self.bestModel == "polynomial":
-            estimates = np.poly1d(self.ws.flatten())(self.xs)
+            return self.calcErrorPolynomial(self.xs, self.ys, self.ws)
         elif self.bestModel == "sinusoidal":
-            estimates = self.ws[0] * np.sin(self.xs) + self.ws[1]
-        diff = self.ys - estimates
-        return np.sum(diff ** 2)
+            return self.calcErrorSinusoidal(self.xs, self.ys, self.ws)
 
     # Plot the line for the line segment
     def plot(self):
@@ -168,29 +187,9 @@ class Partition(LineSegment):
         self.wsSinusoidal = self.regressionNormalEquation(self.XSinusoidal, self.ysTraining)
 
         # Calculate the sum squared error error of each model
-        self.errorLinear = self.calcErrorLinear()
-        self.errorPolynomial = self.calcErrorPolynomial()
-        self.errorSinusoidal = self.calcErrorSinusoidal()
-
-    # Returns the sum squared error for a given set of estimates
-    def calcSumSquaredError(self, estimates):
-        diff = self.ysValidation - estimates
-        return np.sum(diff ** 2)
-
-    # Returns the sum squared error error for linear model
-    def calcErrorLinear(self):
-        estimates = self.wsLinear[0] * self.xsValidation + self.wsLinear[1]
-        return self.calcSumSquaredError(estimates)
-
-    # Returns the sum squared error error for polynomial model
-    def calcErrorPolynomial(self):
-        estimates = np.poly1d(self.wsPolynomial.flatten())(self.xsValidation)
-        return self.calcSumSquaredError(estimates)
-
-    # Returns the sum squared error for sinusoidal model
-    def calcErrorSinusoidal(self):
-        estimates = self.wsSinusoidal[0] * np.sin(self.xsValidation) + self.wsSinusoidal[1]
-        return self.calcSumSquaredError(estimates)
+        self.errorLinear = self.calcErrorLinear(self.xsValidation, self.ysValidation, self.wsLinear)
+        self.errorPolynomial = self.calcErrorPolynomial(self.xsValidation, self.ysValidation, self.wsPolynomial)
+        self.errorSinusoidal = self.calcErrorSinusoidal(self.xsValidation, self.ysValidation, self.wsSinusoidal)
 
 # Loads points in from a given filename as a numpy array
 def loadPoints(filename):

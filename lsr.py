@@ -41,15 +41,98 @@ class LineSegment:
         self.xs = xs
         self.ys = ys
         self.numOfPoints = len(self.xs)
-        self.numTrainingPoints = 14
 
         # Split the data into training data and validation data
-        [
-            self.xsTraining,
-            self.ysTraining,
-            self.xsValidation,
-            self.ysValidation
-        ] = self.splitTrainingValidation()
+        self.numFolds = 5
+        self.kfolds = self.getKFold()
+
+        # Calculate the cross-validation error of each model
+        self.errorLinear = np.sum([kfold.errorLinear for kfold in self.kfolds]) / self.numFolds
+        self.errorPolynomial = np.sum([kfold.errorPolynomial for kfold in self.kfolds]) / self.numFolds
+        self.errorSinusoidal = np.sum([kfold.errorSinusoidal for kfold in self.kfolds]) / self.numFolds
+
+        # Calculate the best model
+        self.bestModel = self.calcBestModel()
+        print(self.bestModel)
+
+        # Calculates the weights for the best model
+        self.ws = self.calcWeights()
+
+        # Calculate the total error of the best model
+        self.totalError = self.calcTotalError()
+
+    # Splits the data into training and validation
+    def getKFold(self):
+        pos = np.random.permutation(self.numOfPoints)
+        xsShuffled = self.xs[pos]
+        ysShuffled = self.ys[pos]
+
+        xsPartition = np.split(xsShuffled, self.numFolds)
+        ysPartition = np.split(ysShuffled, self.numFolds)
+
+        kfolds = []
+        for i in range(self.numFolds):
+            xsTraining = np.concatenate(xsPartition[:i] + xsPartition[i + 1:], axis = 0)
+            xsValidation = xsPartition[i]
+            ysTraining = np.concatenate(ysPartition[:i] + ysPartition[i + 1:], axis = 0)
+            ysValidation = ysPartition[i]
+            kfolds.append(Partition(xsTraining, xsValidation, ysTraining, ysValidation))
+
+        return kfolds
+
+    # Returns the best model (i.e. the one with the lowest cross-validation error)
+    def calcBestModel(self):
+        if (self.errorLinear <= self.errorPolynomial) & (self.errorLinear <= self.errorSinusoidal):
+            return "linear"
+        elif self.errorPolynomial <= self.errorSinusoidal:
+            return "polynomial"
+        else:
+            return "sinusoidal"
+
+    def calcWeights(self):
+        temp = Partition(self.xs, np.array([]), self.ys, np.array([]))
+        ws = np.array([])
+        if self.bestModel == "linear":
+            ws = temp.wsLinear
+        elif self.bestModel == "polynomial":
+            ws = temp.wsPolynomial
+        elif self.bestModel == "sinusoidal":
+            ws = temp.wsSinusoidal
+        return ws
+
+    # Calculates the total error of the best model
+    def calcTotalError(self):
+        estimates = np.array([])
+        if self.bestModel == "linear":
+            estimates = self.ws[0] * self.xs + self.ws[1]
+        elif self.bestModel == "polynomial":
+            estimates = np.poly1d(self.ws.flatten())(self.xs)
+        elif self.bestModel == "sinusoidal":
+            estimates = self.ws[0] * np.sin(self.xs) + self.ws[1]
+        diff = self.ys - estimates
+        return np.sum(diff ** 2)
+
+    # Plot the line for the line segment
+    def plot(self):
+        xsLine = np.linspace(self.xs[0], self.xs[-1], 1000)
+        ysLine = np.array([])
+        if self.bestModel == "linear":
+            ysLine = self.ws[0] * xsLine + self.ws[1]
+        elif self.bestModel == "polynomial":
+            ysLine = np.poly1d(self.ws.flatten())(xsLine)
+        elif self.bestModel == "sinusoidal":
+            ysLine = self.ws[0] * np.sin(xsLine) + self.ws[1]
+        plt.plot(xsLine, ysLine)
+
+class Partition:
+    def __init__(self, xsTraining, xsValidation, ysTraining, ysValidation):
+        # The training and validation data for a given partition
+        self.xsTraining = xsTraining
+        self.xsValidation = xsValidation
+        self.ysTraining = ysTraining
+        self.ysValidation = ysValidation
+
+        self.numTrainingPoints = len(self.xsTraining)
 
         # Get X values of each model from training data
         self.XLinear = self.createXLinear()
@@ -61,29 +144,10 @@ class LineSegment:
         self.wsPolynomial = self.regressionNormalEquation(self.XPolynomial)
         self.wsSinusoidal = self.regressionNormalEquation(self.XSinusoidal)
 
-        # Calculate the cross-validation error of each model
+        # Calculate the sum squared error error of each model
         self.errorLinear = self.calcErrorLinear()
         self.errorPolynomial = self.calcErrorPolynomial()
         self.errorSinusoidal = self.calcErrorSinusoidal()
-
-        # Calculate the best model
-        self.bestModel = self.calcBestModel()
-
-        # Calculate the total error of the best model
-        self.totalError = self.calcTotalError()
-
-    # Splits the data into training and validation
-    def splitTrainingValidation(self):
-        pos = np.random.permutation(self.numOfPoints)
-        tempXs = self.xs[pos]
-        tempYs = self.ys[pos]
-
-        xsTraining = tempXs[:self.numTrainingPoints]
-        ysTraining = tempYs[:self.numTrainingPoints]
-        xsValidation = tempXs[self.numTrainingPoints:]
-        ysValidation = tempYs[self.numTrainingPoints:]
-
-        return xsTraining, ysTraining, xsValidation, ysValidation
 
     # Returns the X values for linear regression
     def createXLinear(self):
@@ -110,58 +174,34 @@ class LineSegment:
         ws = np.linalg.inv(X.T @ X) @ X.T @ self.ysTraining
         return ws
 
-    # Returns the cross-validation error for a given set of estimates
-    def calcCrossValidationError(self, estimates):
+    # Returns the sum squared error for a given set of estimates
+    def calcSumSquaredError(self, estimates):
         diff = self.ysValidation - estimates
         return np.sum(diff ** 2)
 
-    # Returns the cross-validation error for linear model
+    # Returns the sum squared error error for linear model
     def calcErrorLinear(self):
         estimates = self.wsLinear[0] * self.xsValidation + self.wsLinear[1]
-        return self.calcCrossValidationError(estimates)
+        # print("WS")
+        # print(self.wsLinear)
+        # print("YS VAL")
+        # print(self.ysValidation)
+        # print("XS VAL")
+        # print(self.xsValidation)
 
-    # Returns the cross-validation error for polynomial model
+
+
+        return self.calcSumSquaredError(estimates)
+
+    # Returns the sum squared error error for polynomial model
     def calcErrorPolynomial(self):
         estimates = np.poly1d(self.wsPolynomial.flatten())(self.xsValidation)
-        return self.calcCrossValidationError(estimates)
+        return self.calcSumSquaredError(estimates)
 
-    # Returns the cross-validation error for sinusoidal model
+    # Returns the sum squared error for sinusoidal model
     def calcErrorSinusoidal(self):
         estimates = self.wsSinusoidal[0] * np.sin(self.xsValidation) + self.wsSinusoidal[1]
-        return self.calcCrossValidationError(estimates)
-
-    # Returns the best model (i.e. the one with the lowest cross-validation error)
-    def calcBestModel(self):
-        if (self.errorLinear <= self.errorPolynomial) & (self.errorLinear <= self.errorSinusoidal):
-            return "linear"
-        elif self.errorPolynomial <= self.errorSinusoidal:
-            return "polynomial"
-        else:
-            return "sinusoidal"
-
-    # Calculates the total error of the best model
-    def calcTotalError(self):
-        estimates = np.array([])
-        if self.bestModel == "linear":
-            estimates = self.wsLinear[0] * self.xs + self.wsLinear[1]
-        elif self.bestModel == "polynomial":
-            estimates = np.poly1d(self.wsPolynomial.flatten())(self.xs)
-        elif self.bestModel == "sinusoidal":
-            estimates = self.wsSinusoidal[0] * np.sin(self.xs) + self.wsSinusoidal[1]
-        diff = self.ys - estimates
-        return np.sum(diff ** 2)
-
-    # Plot the line for the line segment
-    def plot(self):
-        xsLine = np.linspace(self.xs[0], self.xs[-1], 1000)
-        ysLine = np.array([])
-        if self.bestModel == "linear":
-            ysLine = self.wsLinear[0] * xsLine + self.wsLinear[1]
-        elif self.bestModel == "polynomial":
-            ysLine = np.poly1d(self.wsPolynomial.flatten())(xsLine)
-        elif self.bestModel == "sinusoidal":
-            ysLine = self.wsSinusoidal[0] * np.sin(xsLine) + self.wsSinusoidal[1]
-        plt.plot(xsLine, ysLine)
+        return self.calcSumSquaredError(estimates)
 
 # Loads points in from a given filename as a numpy array
 def loadPoints(filename):

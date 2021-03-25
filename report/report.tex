@@ -28,12 +28,11 @@ error estimation and is given by the equation:
     \vb{\hat{w}} = (\vb{X^{T}}\vb{X})^{-1}\vb{X^{T}}\vb{y}.
 \]
 
-I've implemented this equation in my code as the following to calculate
-the maximum likelihood estimation for my training data:
+I've implemented this equation in my code as the following function 
+to calculate the maximum likelihood estimation:
 \begin{verbatim}
 def regressionNormalEquation(self, X, y):
-    ws = np.linalg.inv(X.T @ X) @ X.T @ y
-    return ws
+    return np.linalg.inv(X.T @ X) @ X.T @ y
 \end{verbatim}
 
 \section{Choice of polynomial order}

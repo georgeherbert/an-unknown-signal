@@ -31,7 +31,9 @@ error estimation and is given by the equation:
 I've implemented this equation in my code as the following to calculate
 the maximum likelihood estimation for my training data:
 \begin{verbatim}
-ws = np.linalg.inv(X.T @ X) @ X.T @ self.ysTraining.
+def regressionNormalEquation(self, X, y):
+    ws = np.linalg.inv(X.T @ X) @ X.T @ y
+    return ws
 \end{verbatim}
 
 \section{Choice of polynomial order}
@@ -46,6 +48,10 @@ structure of the underlying model.
 In the case of linear regeression, overfitting typically occurs
 when the model produced contains too complex a function class,
 such that it would fail to predict future observations.
+
+Cross-validation can be used to detect overfitting. We can partition
+our data into two subsets: a training set and a validation set;
+
 
 To prevent overfitting, I have used $k$-fold cross-validation
 for each line segment, the process for which is as follows:

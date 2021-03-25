@@ -45,8 +45,7 @@ class UnknownSignal:
 class LineSegment:
     # The regression normal equation
     def regressionNormalEquation(self, X, y):
-        ws = np.linalg.inv(X.T @ X) @ X.T @ y
-        return ws
+        return np.linalg.inv(X.T @ X) @ X.T @ y
 
     # Returns the X values for linear regression
     def createXLinear(self, xs):

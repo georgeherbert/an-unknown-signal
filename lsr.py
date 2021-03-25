@@ -132,7 +132,7 @@ class FullLineSegment(LineSegment):
         elif self.errorPolynomial <= self.errorSinusoidal:
             return "polynomial"
         else:
-            return "sinusoidal"
+            return "sinusoidal"        
 
     # Calculate the weights using the best model
     def calcWeights(self):

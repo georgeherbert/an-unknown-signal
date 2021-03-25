@@ -5,16 +5,21 @@ from matplotlib import pyplot as plt
 
 class UnknownSignal:
     def __init__(self, xs, ys, plot):
+        # The x and y values of an unknown signal
         self.xs = xs
         self.ys = ys
         
+        # The number of points and segments of an unknown signal
         self.numPoints = len(self.xs)
         self.numSegments = self.numPoints // 20
 
+        # The segments
         self.segments = self.splitIntoSegments()
 
+        # Output the total error
         self.outputTotalError()
 
+        # Plot the graph
         if plot:
             self.plot()
 
@@ -83,11 +88,14 @@ class LineSegment:
 
 class FullLineSegment(LineSegment):
     def __init__(self, xs, ys):
+        # The x and y values of a line segment
         self.xs = xs
         self.ys = ys
+
+        # The number of points in the line segment
         self.numOfPoints = len(self.xs)
 
-        # Split the data into training data and validation data
+        # K-Fold cross validation
         self.numFolds = 5
         self.kfolds = self.getKFold()
 
@@ -96,17 +104,13 @@ class FullLineSegment(LineSegment):
         self.errorPolynomial = np.sum([kfold.errorPolynomial for kfold in self.kfolds]) / self.numFolds
         self.errorSinusoidal = np.sum([kfold.errorSinusoidal for kfold in self.kfolds]) / self.numFolds
 
-        # Calculate the best model
+        # The best model, the weights and the total error
         self.bestModel = self.calcBestModel()
         print(self.bestModel)
-
-        # Calculates the weights for the best model
         self.ws = self.calcWeights()
-
-        # Calculate the total error of the best model
         self.totalError = self.calcTotalError()
 
-    # Splits the data into training and validation
+    # Returns the k-fold partitions
     def getKFold(self):
         pos = np.random.permutation(self.numOfPoints)
         xsShuffled = self.xs[pos]
@@ -134,7 +138,7 @@ class FullLineSegment(LineSegment):
         else:
             return "sinusoidal"        
 
-    # Calculate the weights using the best model
+    # Returns the weights of the best model
     def calcWeights(self):
         if self.bestModel == "linear":
             X = self.createXLinear(self.xs)
@@ -146,7 +150,7 @@ class FullLineSegment(LineSegment):
             X = self.createXSinusoidal(self.xs)
             return self.regressionNormalEquation(X, self.ys)
 
-    # Calculates the total error of the best model
+    # Returns the total error of the best model
     def calcTotalError(self):
         if self.bestModel == "linear":
             return self.calcErrorLinear(self.xs, self.ys, self.ws)
@@ -155,7 +159,7 @@ class FullLineSegment(LineSegment):
         elif self.bestModel == "sinusoidal":
             return self.calcErrorSinusoidal(self.xs, self.ys, self.ws)
 
-    # Plot the line for the line segment
+    # Plot the line of the line segment
     def plot(self):
         xsLine = np.linspace(self.xs[0], self.xs[-1], 1000)
         if self.bestModel == "linear":
@@ -174,19 +178,20 @@ class Partition(LineSegment):
         self.ysTraining = ysTraining
         self.ysValidation = ysValidation
 
+        # The number of training points
         self.numTrainingPoints = len(self.xsTraining)
 
-        # Get X values of each model from training data
+        # X values of each model from training data
         self.XLinear = self.createXLinear(self.xsTraining)
         self.XPolynomial = self.createXPolynomial(self.xsTraining)
         self.XSinusoidal = self.createXSinusoidal(self.xsTraining)
 
-        # Get the weights of each model
+        # The weights of each model
         self.wsLinear = self.regressionNormalEquation(self.XLinear, self.ysTraining)
         self.wsPolynomial = self.regressionNormalEquation(self.XPolynomial, self.ysTraining)
         self.wsSinusoidal = self.regressionNormalEquation(self.XSinusoidal, self.ysTraining)
 
-        # Calculate the sum squared error error of each model
+        # The sum squared error error of each model
         self.errorLinear = self.calcErrorLinear(self.xsValidation, self.ysValidation, self.wsLinear)
         self.errorPolynomial = self.calcErrorPolynomial(self.xsValidation, self.ysValidation, self.wsPolynomial)
         self.errorSinusoidal = self.calcErrorSinusoidal(self.xsValidation, self.ysValidation, self.wsSinusoidal)

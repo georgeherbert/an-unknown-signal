@@ -97,7 +97,7 @@ class FullLineSegment(LineSegment):
         self.numOfPoints = len(self.xs)
 
         # K-Fold cross validation
-        self.numFolds = 5
+        self.numFolds = 20
         self.kfolds = self.getKFold()
 
         # Calculate the cross-validation error of each model

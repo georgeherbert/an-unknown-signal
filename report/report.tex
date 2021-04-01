@@ -67,9 +67,9 @@ as implemented in the \texttt{getKFold()} method.
 Then, each subsample is used exactly once as validation data,
 whilst the other $k - 1$ paritions are used as training data.
 The cross-validation error for each model is calculated
-as follows \cite{EOSL}:
+as follows \cite{Stanford}:
 \[
-    CV({\hat{f}}) = \frac{1}{N}\sum_{i = 1}^{N}SSE(y_{i}, \hat{f}_{i}(x_{i}))
+    CV_{(n)} = \frac{1}{n} \sum_{i = 1}^{n} (y_{i} - \hat{y}^{(-i)})^{2}
 \]
 where
 $\hat{f}$ is a given model;
@@ -89,6 +89,7 @@ The model with the lowest cross-validation error is then selected.
     \item{Using \texttt{np.linalg.solve}}
     \item{Not shuffling the data before leave-one-out cross-validation}
     \item{Not finding the average cross-validation error}
+    \item{Using the linear regression leave-one-out shortcut}
 \end{enumerate}
 
 \begin{thebibliography}{9}
@@ -98,10 +99,10 @@ The model with the lowest cross-validation error is then selected.
     \textit{Model Selection and Multimodel Inference}.
     2nd ed. Springer-Verlag.
 
-    \bibitem{EOSL} 
-    Hastie, T., Tibshirani, R. and Friedman, J. (2001)
-    \textit{The Elements of Statistical Learning: Data Mining, Inference, and Prediction}. 
-    2nd ed. New York: Springer.
+    \bibitem{Stanford}
+    Taylor, J. (2020)
+    \textit{Leave one out cross-validation (LOOCV)}
+    https://web.stanford.edu/class/stats202/notes/Resampling/LOOCV.html
 
 \end{thebibliography}
     

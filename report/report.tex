@@ -118,7 +118,8 @@ The function type with the lowest cross-validation error is then selected.
 
 \section{Optimisations and improvements}
 
-Computing the matrix inverse using the \texttt{np.linalg.inv}
+To begin with,
+computing the matrix inverse using the \texttt{np.linalg.inv}
 method is computationally expensive and unncessary.
 Instead, given $\vb{X}$ and $\vb{y}$ the maximum likelihood
 estimation could be computed directly as follows:
@@ -130,7 +131,7 @@ So, you could save time and computing power by solving
 for $\vb{\hat{w}}$ in
 $\vb{X}^{T} \vb{X} \vb{\hat{w}} = \vb{X}^{T} \vb{y}$ directly.
 
-Calculating the cross-validation error using leave-one-out
+Secondly, calculating the cross-validation error using leave-one-out
 cross-validation is computationally expensive, as it involves
 fitting the model and calculating the sum squared error
 $n$ times. I could have used a less

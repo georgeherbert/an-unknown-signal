@@ -50,6 +50,12 @@ class, such that it would fail to predict future observations.
 
 \section{Model selection}
 
+To prevent overfitting, I have used leave-one-out
+cross-validation when producing a model for each 20-point
+line segment. Leave-one-out cross-validation is equivalent
+to $k$-fold cross validation, such that $k = n$, where
+$n$ is the number of data-points (in this case 20).
+
 To prevent overfitting each line segment, I have used a type of 
 cross-validation known as $k$-fold cross-validation---in particular,
 I have used 5-fold cross-validation. 

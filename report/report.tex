@@ -1,5 +1,5 @@
 \documentclass[onecolumn, 11pt, a4paper]{article}
-\usepackage[a4paper,left = 2.5cm,right = 2.5cm, top = 2.5cm, bottom = 2.5cm]{geometry}
+% \usepackage[a4paper,left = 2.5cm,right = 2.5cm, top = 2.5cm, bottom = 2.5cm]{geometry}
 \usepackage{physics}
 \usepackage{amsmath}
  
@@ -121,23 +121,26 @@ The function type with the lowest cross-validation error is then selected.
 To begin with,
 computing the matrix inverse using the \texttt{np.linalg.inv}
 method is computationally expensive and unncessary.
-Instead, given $\vb{X}$ and $\vb{y}$ the maximum likelihood
+Instead, given $\vb{X}$ and $\vb{y}$, the maximum likelihood
 estimation could be computed directly as follows:
 \texttt{np.linalg.solve(X.T @ X, @ X.T @ y)}.
-This would be computationally faster, as \texttt{np.linalg.inv}
+This would be faster, as \texttt{np.linalg.inv}
 computes the inverse of a matrix $\vb{A}$ by solving for $\vb{A}^{-1}$
 in $\vb{AA^{-1} = I}$ \cite{StackOverflow}.
-Therefore, by solving for $\vb{\hat{w}}$ in
+Thus, there would be a performance benefit by solving for
+$\vb{\hat{w}}$ in
 $\vb{X}^{T} \vb{X} \vb{\hat{w}} = \vb{X}^{T} \vb{y}$ directly,
-the computational cost could be reduced slightly.
 
-Secondly, calculating the cross-validation error using leave-one-out
-cross-validation is computationally expensive, as it involves
+Another computationally expensive operation in my
+algorithm is that used to calculate the cross-validation error 
+using leave-one-out cross-validation.
+This is because it involves
 fitting the model and calculating the sum squared error
-$n$ times. I could have used a less
-computationally-expensive way of calculating the cross-validation
-error that involves calculating the leverage.
-However, I opted not to do this as my algorithm as it
+$n$ times. 
+Instead, there exists a faster method I could have
+adopted that involves calculating the leverage.
+Despite this, I opted not to include this method; 
+owning to the fact that my program as it
 currently stands can be easily adapted to use $k$-fold
 cross-validation for any value of $k$ that is a factor of 20
 by changing the constant \texttt{K} in my code.
@@ -146,7 +149,6 @@ by changing the constant \texttt{K} in my code.
 \begin{enumerate}
     \item{Not shuffling the data before leave-one-out cross-validation}
     \item{Not finding the average cross-validation error}
-    \item{Using the linear regression leave-one-out shortcut}
 \end{enumerate}
 
 \begin{thebibliography}{9}

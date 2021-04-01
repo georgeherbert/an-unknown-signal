@@ -6,8 +6,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Constants
-ORDER = 3
-K = 20
+ORDER = 3 # Order of the polynomial function
+K = 20 # Value of k in k-fold (i.e. the number of folds)
 
 class UnknownSignal:
     def __init__(self, xs, ys, plot):

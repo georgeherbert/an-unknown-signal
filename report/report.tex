@@ -124,11 +124,10 @@ estimation could be computed directly as follows:
 \texttt{np.linalg.solve(X.T @ X, @ X.T @ y)}.
 This would be computationally faster, as \texttt{np.linalg.inv}
 computes the inverse of a matrix $\vb{A}$ by solving for $\vb{A}^{-1}$
-in $\vb{AA^{-1} = I}$.
+in $\vb{AA^{-1} = I}$ \cite{StackOverflow}.
 So, you could save time and computing power by solving
 for $\vb{\hat{w}}$ in
-$\vb{X}^{T} \vb{X} \vb{\hat{w}} = \vb{X}^{T} \vb{y}$
-directly.
+$\vb{X}^{T} \vb{X} \vb{\hat{w}} = \vb{X}^{T} \vb{y}$ directly.
 
 \begin{enumerate}
     \item{Not shuffling the data before leave-one-out cross-validation}
@@ -147,6 +146,13 @@ directly.
     Taylor, J. (2020)
     \textit{Leave one out cross-validation (LOOCV) --- STATS 202}
     https://web.stanford.edu/class/stats202/notes/Resampling/LOOCV.html
+
+    \bibitem{StackOverflow}
+    Muldal, A. (2017)
+    \textit{Why does numpy.linalg.solve() offer more precise matrix inversions than numpy.linalg.inv()?}
+    https://stackoverflow.com/a/31257909/8540479
+
+
 
 \end{thebibliography}
     

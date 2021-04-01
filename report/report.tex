@@ -95,8 +95,8 @@ such that $k = n$, where
 $n$ is the number of data-points (in this case 20).
 Despite being computationally expensive, I believe that
 leave-one-out cross-validation is an appropriate technique
-to prevent overfitting due to the limited sample size
-of each line segment.
+to prevent overfitting in this case,
+owing to the limited sample size of each line segment.
 
 Leave-one-out cross-validation involves using each of
 the 20 data-points exactly once as validation data for a model
@@ -138,7 +138,7 @@ $n$ times.
 Instead, there exists a faster method I could have
 adopted that involves calculating the leverage.
 Despite this, I opted not to include this method; 
-owning to the fact that my program as it
+owing to the fact that my program as it
 currently stands can be easily adapted to use $k$-fold
 cross-validation for any value of $k$ that is a factor of 20
 by changing the constant \texttt{K} in the code.

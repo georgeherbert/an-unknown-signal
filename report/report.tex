@@ -1,5 +1,6 @@
 \documentclass[onecolumn, 12t, a4paper]{article}
 \usepackage{physics}
+\usepackage{amsmath}
  
 \author{
   George Herbert\\
@@ -27,13 +28,47 @@ error estimation and is given by the equation:
 \[
     \vb{\hat{w}} = (\vb{X}^{T}\vb{X})^{-1}\vb{X}^{T}\vb{y}.
 \]
-I've implemented this equation in my code as the following function:
+
+This equation is implementing in my code as the following
+method:
 \begin{verbatim}
 def regressionNormalEquation(self, X, y):
     return np.linalg.inv(X.T @ X) @ X.T @ y
 \end{verbatim}
 
+$\vb{X}$ can take one of the following
+three forms:
+\[
+\vb{X} =
+\begin{bmatrix}
+    x_{1} & 1 \\
+    \vdots & \vdots \\
+    x_{20} & 1 \\
+\end{bmatrix}
+\quad
+\vb{X} =
+\begin{bmatrix}
+    x_{1}^{n} & x_{1}^{n-1} & \dots & 1 \\
+    \vdots & \vdots & \ddots & \vdots \\
+    x_{20}^{n} & x_{20}^{n-1} & \dots & 1 \\
+\end{bmatrix}
+\quad
+\vb{X} =
+\begin{bmatrix}
+    f(x_{1}) & 1 \\
+    \vdots & \vdots \\
+    f(x_{20}) & 1 \\
+\end{bmatrix}
+\]
+depending on whether the line is linear, polynomial or
+the unknown function $f(x)$, respectively.
+
+
+
 \section{Choice of polynomial order}
+
+Having identified that the files named `\texttt{basic\_*.csv}'
+contained a negligable amount of noise
 
 
 \section{Choice of unknown function}

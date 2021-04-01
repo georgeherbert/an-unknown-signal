@@ -5,6 +5,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Constants
+ORDER = 3
+K = 20
+
 class UnknownSignal:
     def __init__(self, xs, ys, plot):
         # The x and y values of an unknown signal
@@ -55,9 +59,8 @@ class LineSegment:
     
     # Returns the X values for polynomial regression
     def createXPolynomial(self, xs):
-        order = 3
         XPowersList = []
-        for i in range(order + 1):
+        for i in range(ORDER + 1):
             values = xs ** i
             XPowersList.insert(0, values)
         return np.hstack(XPowersList)
@@ -98,13 +101,12 @@ class FullLineSegment(LineSegment):
         self.numOfPoints = len(self.xs)
 
         # K-Fold cross validation
-        self.numFolds = 20
         self.kfolds = self.getKFold()
 
         # Calculate the cross-validation error of each model
-        self.errorLinear = np.sum([kfold.errorLinear for kfold in self.kfolds]) / self.numFolds
-        self.errorPolynomial = np.sum([kfold.errorPolynomial for kfold in self.kfolds]) / self.numFolds
-        self.errorSinusoidal = np.sum([kfold.errorSinusoidal for kfold in self.kfolds]) / self.numFolds
+        self.errorLinear = np.sum([kfold.errorLinear for kfold in self.kfolds]) / K
+        self.errorPolynomial = np.sum([kfold.errorPolynomial for kfold in self.kfolds]) / K
+        self.errorSinusoidal = np.sum([kfold.errorSinusoidal for kfold in self.kfolds]) / K
 
         # The best model, the weights and the total error
         self.bestModel = self.calcBestModel()
@@ -118,11 +120,11 @@ class FullLineSegment(LineSegment):
         xsShuffled = self.xs[pos]
         ysShuffled = self.ys[pos]
 
-        xsPartition = np.split(xsShuffled, self.numFolds)
-        ysPartition = np.split(ysShuffled, self.numFolds)
+        xsPartition = np.split(xsShuffled, K)
+        ysPartition = np.split(ysShuffled, K)
 
         kfolds = []
-        for i in range(self.numFolds):
+        for i in range(K):
             xsTraining = np.concatenate(xsPartition[:i] + xsPartition[i + 1:], axis = 0)
             xsValidation = xsPartition[i]
             ysTraining = np.concatenate(ysPartition[:i] + ysPartition[i + 1:], axis = 0)

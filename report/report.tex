@@ -1,4 +1,5 @@
-\documentclass[onecolumn, 12t, a4paper]{article}
+\documentclass[onecolumn, 11pt, a4paper]{article}
+\usepackage[a4paper,left = 2.5cm,right = 2.5cm, top = 2.5cm, bottom = 2.5cm]{geometry}
 \usepackage{physics}
 \usepackage{amsmath}
  
@@ -128,6 +129,18 @@ in $\vb{AA^{-1} = I}$ \cite{StackOverflow}.
 So, you could save time and computing power by solving
 for $\vb{\hat{w}}$ in
 $\vb{X}^{T} \vb{X} \vb{\hat{w}} = \vb{X}^{T} \vb{y}$ directly.
+
+Calculating the cross-validation error using leave-one-out
+cross-validation is computationally expensive, as it involves
+fitting the model and calculating the sum squared error
+$n$ times. I could have used a less
+computationally-expensive way of calculating the cross-validation
+error that involves calculating the leverage.
+However, I opted not to do this as my algorithm as it
+currently stands can be easily adapted to use $k$-fold
+cross-validation for any value of $k$ that is a factor of 20
+by changing the constant \texttt{K} in my code.
+
 
 \begin{enumerate}
     \item{Not shuffling the data before leave-one-out cross-validation}

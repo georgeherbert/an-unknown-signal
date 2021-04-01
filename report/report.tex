@@ -39,14 +39,23 @@ def regressionNormalEquation(self, X, y):
 
 \section{Overfitting}
 
-Overfitting occurs when an algorithm produces a model that has
+Overfitting occurs when a machine learning algorithm
+produces a model that has learnt the noise in the data
+as if it represents the structure of the underlying
+model. \cite{MSMI}
+
+
+When producing a fit for a given line segment,
+overfitting is most likely to occur the algorithm 
+produces a fit that has
 learnt the noise in the data as if it represents the
 structure of the underlying model.
+
 In the case of linear regeression, overfitting typically occurs
 when the model produced contains too complex a function class,
 such that it would fail to predict future observations.
 
-\section{Model Selection}
+\section{Model selection}
 
 To prevent overfitting each line segment, I have used a type of 
 cross-validation known as $k$-fold cross-validation---in particular,
@@ -85,10 +94,17 @@ The model with the lowest cross-validation error is then selected.
 \end{enumerate}
 
 \begin{thebibliography}{9}
+
+    \bibitem{MSMI}
+    Burnham, K. P. and Anderson, D. R. (2002)
+    \textit{Model Selection and Multimodel Inference}.
+    2nd ed. Springer-Verlag.
+
     \bibitem{EOSL} 
     Hastie, T., Tibshirani, R. and Friedman, J. (2001)
     \textit{The Elements of Statistical Learning: Data Mining, Inference, and Prediction}. 
     2nd ed. New York: Springer.
+
 \end{thebibliography}
     
 

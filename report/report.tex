@@ -56,17 +56,10 @@ line segment. Leave-one-out cross-validation is
 an extreme case of $k$-fold cross validation
 such that $k = n$, where
 $n$ is the number of data-points (in this case 20).
-
 Despite being computationally expensive, I believe that
-leave-one-out cross-validation is an appropriate method
-to prevent overfitting each line segment.
-This is b
-
-To prevent overfitting each line segment, I have used a type of 
-cross-validation known as $k$-fold cross-validation---in particular,
-I have used 5-fold cross-validation. 
-I opted to use $k$-fold cross-validation due to the small number
-of datapoints in each segment.
+leave-one-out cross-validation is an appropriate technique
+to prevent overfitting, due to there only being 20 data-points
+for each line segment.
 
 To begin with, $k$-fold cross-validation involves shuffling and 
 splitting each 20-point segment into $k$ evenly-sized subsamples,

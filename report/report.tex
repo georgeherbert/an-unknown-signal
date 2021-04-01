@@ -114,8 +114,6 @@ datapoint, when trained without using the $i$-th sample.
 
 The function type with the lowest cross-validation error is then selected.
 
-\section{Testing}
-
 \section{Optimisations and improvements}
 
 To begin with,
@@ -145,11 +143,15 @@ currently stands can be easily adapted to use $k$-fold
 cross-validation for any value of $k$ that is a factor of 20
 by changing the constant \texttt{K} in the code.
 
-
 \begin{enumerate}
     \item{Not shuffling the data before leave-one-out cross-validation}
     \item{Not finding the average cross-validation error}
 \end{enumerate}
+
+\section{Testing}
+
+I created a file \texttt{test.py} to test each of the
+functions in my program.
 
 \begin{thebibliography}{9}
 

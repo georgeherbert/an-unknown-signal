@@ -127,9 +127,9 @@ estimation could be computed directly as follows:
 This would be computationally faster, as \texttt{np.linalg.inv}
 computes the inverse of a matrix $\vb{A}$ by solving for $\vb{A}^{-1}$
 in $\vb{AA^{-1} = I}$ \cite{StackOverflow}.
-So, you could save time and computing power by solving
-for $\vb{\hat{w}}$ in
-$\vb{X}^{T} \vb{X} \vb{\hat{w}} = \vb{X}^{T} \vb{y}$ directly.
+Therefore, by solving for $\vb{\hat{w}}$ in
+$\vb{X}^{T} \vb{X} \vb{\hat{w}} = \vb{X}^{T} \vb{y}$ directly,
+the computational cost could be reduced slightly.
 
 Secondly, calculating the cross-validation error using leave-one-out
 cross-validation is computationally expensive, as it involves

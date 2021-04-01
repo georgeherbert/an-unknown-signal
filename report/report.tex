@@ -46,7 +46,7 @@ model. \cite{MSMI}
 
 In the case of linear regression, overfitting is most
 likely to occur by producing a model with too complex a function
-class, such that it would fail to predict future observations.
+type, such that it would fail to predict future observations.
 
 \section{Model selection}
 
@@ -58,28 +58,24 @@ such that $k = n$, where
 $n$ is the number of data-points (in this case 20).
 Despite being computationally expensive, I believe that
 leave-one-out cross-validation is an appropriate technique
-to prevent overfitting, due to there only being 20 data-points
-for each line segment.
+to prevent overfitting, due to the limited sample size
+of each line segment.
 
-To begin with, $k$-fold cross-validation involves shuffling and 
-splitting each 20-point segment into $k$ evenly-sized subsamples,
-as implemented in the \texttt{getKFold()} method.
-Then, each subsample is used exactly once as validation data,
-whilst the other $k - 1$ paritions are used as training data.
-The cross-validation error for each model is calculated
+Leave-one-out cross-validation involves using each of
+the 20 data-points exactly once as validation data for a model
+trained using the other 19 data-points. 
+The cross-validation error for each function type is calculated
 as follows \cite{Stanford}:
 \[
     CV_{(n)} = \frac{1}{n} \sum_{i = 1}^{n} (y_{i} - \hat{y}^{(-i)})^{2}
 \]
 where
-$\hat{f}$ is a given model;
-$\hat{f}_{i}$ is the fitted function, trained with the $i$-th subsample removed;
-$N$ is the number of folds (in this case 5);
-$SSE$ is the sum squared error function;
-$y_{i}$ is the y datapoints of subsample $i$;
-and $x_{i}$ is the x datapoints of subsample $i$.
+$n$ is the number of datapoints in a line segment (i.e. 20);
+$y_{i}$ is the actual $y$-value for the $i$-th datapoint;
+and $\hat{y}^{(-i)}$ is the predicted $y$-value for the $i$-th
+datapoint, when trained without using the $i$-th sample.
 
-The model with the lowest cross-validation error is then selected.
+The function type with the lowest cross-validation error is then selected.
 
 \section{Testing}
 

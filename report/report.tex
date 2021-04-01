@@ -62,8 +62,6 @@ three forms:
 depending on whether the line is linear, polynomial or
 the unknown function $f$, respectively.
 
-
-
 \section{Choice of polynomial order}
 
 Having identified that the files named `\texttt{basic\_*.csv}'
@@ -119,8 +117,20 @@ The function type with the lowest cross-validation error is then selected.
 
 \section{Optimisations and improvements}
 
+Computing the matrix inverse using the \texttt{np.linalg.inv}
+method is computationally expensive and unncessary.
+Instead, given $\vb{X}$ and $\vb{y}$ the maximum likelihood
+estimation could be computed directly as follows:
+\texttt{np.linalg.solve(X.T @ X, @ X.T @ y)}.
+This would be computationally faster, as \texttt{np.linalg.inv}
+computes the inverse of a matrix $\vb{A}$ by solving for $\vb{A}^{-1}$
+in $\vb{AA^{-1} = I}$.
+So, you could save time and computing power by solving
+for $\vb{\hat{w}}$ in
+$\vb{X}^{T} \vb{X} \vb{\hat{w}} = \vb{X}^{T} \vb{y}$
+directly.
+
 \begin{enumerate}
-    \item{Using \texttt{np.linalg.solve}}
     \item{Not shuffling the data before leave-one-out cross-validation}
     \item{Not finding the average cross-validation error}
     \item{Using the linear regression leave-one-out shortcut}

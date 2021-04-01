@@ -1,4 +1,4 @@
-\documentclass[onecolumn, 12pt, a4paper]{article}
+\documentclass[onecolumn, 12t, a4paper]{article}
 \usepackage{physics}
  
 \author{
@@ -52,9 +52,15 @@ class, such that it would fail to predict future observations.
 
 To prevent overfitting, I have used leave-one-out
 cross-validation when producing a model for each 20-point
-line segment. Leave-one-out cross-validation is equivalent
-to $k$-fold cross validation, such that $k = n$, where
+line segment. Leave-one-out cross-validation is 
+an extreme case of $k$-fold cross validation
+such that $k = n$, where
 $n$ is the number of data-points (in this case 20).
+
+Despite being computationally expensive, I believe that
+leave-one-out cross-validation is an appropriate method
+to prevent overfitting each line segment.
+This is b
 
 To prevent overfitting each line segment, I have used a type of 
 cross-validation known as $k$-fold cross-validation---in particular,

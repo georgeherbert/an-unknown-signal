@@ -202,7 +202,7 @@ class Partition(LineSegment):
 
 # Loads points in from a given filename as a numpy array
 def loadPoints(filename):
-    points = pd.read_csv(filename, header=None)
+    points = pd.read_csv(filename, header = None)
     xs = np.array([[x] for x in points[0].values])
     ys = np.array([[y] for y in points[1].values])
     return xs, ys

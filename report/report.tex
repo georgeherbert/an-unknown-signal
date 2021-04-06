@@ -79,7 +79,7 @@ from this program is shown in Table \ref{tab:order.py}.
     \caption{\label{tab:order.py}Section of the output from \texttt{order.py}}
 \begin{tabular}{l l l l} 
     \hline\hline
-    Filename & Line segment & Polynomial order & Cross-validation error \\ [0.5ex] 
+    Filename & Line segment & Polynomial degree & Cross-validation error \\ [0.5ex] 
     \hline
     basic\_3.csv & 0 & 2 & 7.3947610358752875 \\ 
     basic\_3.csv & 0 & 3 & 1.2989585613760917e-23 \\
@@ -91,10 +91,11 @@ from this program is shown in Table \ref{tab:order.py}.
 \end{center}
 \end{table}
 
-Having analysed this output, it was clear that the
-polynomial degree that most consistely gave a low
-cross-validation error was a polynomial of degree 3
-(i.e. a cubic).
+Having analysed the output, it was clear that a large
+proportion of the non-linear signals had their lowest
+cross-validation error when fitted with a polynomial of degree
+3. This indicates that the polynomial order in the `unknown
+signals' is 3.
 
 \section{Choice of unknown function}
 

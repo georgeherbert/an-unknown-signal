@@ -48,8 +48,6 @@ def regressionNormalEquation(X, y):
     return np.linalg.solve(X.T @ X, X.T @ y)
     # return np.linalg.inv(X.T @ X) @ X.T @ y
 
-
-
 if __name__ == "__main__":
     for filenameSegments in SEGMENTS:
         xs, ys = loadPoints(filenameSegments[0])
@@ -64,9 +62,9 @@ if __name__ == "__main__":
             for order in [2, 3, 4, 5, 6, 7, 8, 9, 10]:
                 X = createXPolynomial(xTraining, order)
                 ws = regressionNormalEquation(X, yTraining)
-                estimates = np.poly1d(ws.flatten())(xsValidation)
-                diff = ysValidation - estimates
+                estimates = np.poly1d(ws.flatten())(xValidation)
+                diff = yValidation - estimates
                 error = np.sum(diff ** 2)
-                print(f"{filenameSegments[0]:>15} {i:>5} {order:>5} {error:<15}")
+                print(f"{filenameSegments[0]:>15} {filenameSegments[1][i]:>5} {order:>5} {error:<15}")
             
 

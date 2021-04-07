@@ -37,12 +37,10 @@ def splitTrainingValidation(xs, ys):
         ysValidation.append(y[15:])
     return xsTraining, xsValidation, ysTraining, ysValidation
 
-def createXPolynomial(xs, order):
-    XPowersList = []
-    for i in range(order + 1):
-        values = xs ** i
-        XPowersList.insert(0, values)
-    return np.hstack(XPowersList)
+def createXFunc(xs, func):
+    ones = np.ones((len(xs), 1))
+    funcxs = func(xs)
+    return np.hstack([funcxs, ones])
 
 def regressionNormalEquation(X, y):
     return np.linalg.solve(X.T @ X, X.T @ y)
@@ -59,12 +57,12 @@ if __name__ == "__main__":
             yTraining = ysTraining[i]
             yValidation = ysValidation[i]
             print("-" * 50)
-            for order in [2, 3, 4, 5, 6, 7, 8, 9, 10]:
-                X = createXPolynomial(xTraining, order)
+            for func in [np.sin, np.cos, np.tan, np.exp]:
+                X = createXFunc(xTraining, func)
                 ws = regressionNormalEquation(X, yTraining)
-                estimates = np.poly1d(ws.flatten())(xValidation)
+                estimates = ws[0] * func(xValidation) + ws[1]
                 diff = yValidation - estimates
                 error = np.sum(diff ** 2)
-                print(f"{filenameSegments[0]:>15} {filenameSegments[1][i]:>5} {order:>5} {error:<15}")
+                print(f"{filenameSegments[0]:>15} {filenameSegments[1][i]:>5} {str(func):>5} {error:<15}")
             
 

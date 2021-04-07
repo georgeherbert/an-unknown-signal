@@ -92,15 +92,34 @@ from this program is shown in Table \ref{tab:degree.py}.
 \end{table}
 
 Having analysed the output, it was clear that a large
-proportion of the non-linear signals had their lowest
+proportion of the nonlinear signals had their lowest
 cross-validation error when fitted with a polynomial of degree
 3. This indicated that the polynomials in the unknown signal
 are cubic.
 
 \section{Choice of unknown function}
 
-Initially, I used an `eyeball estimation' to draw up a list
-of candidates for the unknown function.
+Using my \texttt{display.py} program to visualise the
+signals, I produced a list of potential functions that could
+be used to produce the line segments, based on their shapes:
+$\vb{w}_{1}sin(x) + \vb{w}_{2}$,
+$\vb{w}_{1}cos(x) + \vb{w}_{2}$,
+$\vb{w}_{1}tan(x) + \vb{w}_{2}$ and
+$\vb{w}_{1}e^{x} + \vb{w}_{2}$.
+
+I then created a program \texttt{unknown.py} that
+calculated the cross-validation error for each of the
+nonlinear line segments previously identified, when
+trained using each of the potential unknown functions.
+The values of which were outputted in a table---similar 
+to that used to determine the degree of the polynomial.
+
+Having analysed the cross-validation errors, it was clear
+that all non-linear signals that were likely not
+a cubic polynomial, had their minimum cross-validation
+error when trained to fit the function
+$\vb{w}_{1}sin(x) + \vb{w}_{2}$.
+
 
 \section{Overfitting}
 

@@ -14,7 +14,7 @@ SEGMENTS = [
 ]
 
 def loadPoints(filename):
-    points = pd.read_csv(f"training/{filename}", header = None)
+    points = pd.read_csv(f"../training/{filename}", header = None)
     xs = np.array([[x] for x in points[0].values])
     ys = np.array([[y] for y in points[1].values])
     return xs, ys

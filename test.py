@@ -1,3 +1,5 @@
+# THIS FILE NO LONGER WORKS
+
 import numpy as np
 from lsr import calcSegmentError
 
@@ -22,7 +24,6 @@ def test_calcSegmentError():
         np.array([[0.5], [3.5], [4.5], [7.5], [8.5], [11.5]]),
         np.array([[2], [1]])
     ) == 1.5, "Should be 1.5"
-
 
 if __name__ == "__main__":
     test_calcSegmentError()

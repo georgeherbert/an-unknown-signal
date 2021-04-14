@@ -209,7 +209,10 @@ $y_{i}$ is the actual $y$-value for the $i$-th datapoint;
 and $\hat{y}^{(-i)}$ is the predicted $y$-value for the $i$-th
 datapoint, when trained without using the $i$-th sample.
 
-The function type with the lowest cross-validation error is then selected.
+The function type with the lowest cross-validation error
+is then selected for each line segment,
+and the weights $\vb{\hat{w}}$ are determined by training on all
+data points for that segment.
 
 \section{Optimisations and improvements}
 

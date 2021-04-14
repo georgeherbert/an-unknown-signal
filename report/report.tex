@@ -17,7 +17,7 @@
 
 \begin{abstract}
     This report demonstrates my understanding of the methods I have 
-    used, the results results I have obtained and my understanding
+    used, the results I have obtained, and my understanding
     of issues such as overfitting for the `An Unknown Signal'
     coursework.
 \end{abstract}
@@ -26,7 +26,7 @@
 
 For a set of points that lie along a line with Gaussian noise 
 $\vb{y} = \vb{X}\vb{w} + \vb{\epsilon}$ where $\epsilon_{i} \sim \mathcal{N}(0, \sigma^{2})$,
-the maximum likelihood esimation of $\vb{w}$ is equivalent to
+the maximum likelihood estimation of $\vb{w}$ is equivalent to
 the least square error estimation and is given by the equation:
 \[
     \vb{\hat{w}} = (\vb{X}^{T}\vb{X})^{-1}\vb{X}^{T}\vb{y}.
@@ -85,20 +85,22 @@ or the unknown function $f$, respectively.
 \end{table}
 
 Having created a program, `\texttt{display.py}', to visualise
-the graphs, I drew up a list of line segments that appeared to
-be nonlinear.
+the points, I drew up a list of segments that appeared 
+nonlinear.
 Then, I created a program, `\texttt{degree.py}', that calculated
-the cross-validation error for each of these line segments
-when trained using a model with a polynomial of degree 2,
-to a polynomial of degree 10. A small section of the output
+the cross-validation error for these line segments
+when trained using a model with a polynomial of degree 2
+to a polynomial of degree 10; Table \ref{tab:degree.py}
+shows a small section from the output of this program.
+A small section of the output
 from this program is shown in Table \ref{tab:degree.py}.
 
 Having analysed the output, it was clear that a large
-proportion of the nonlinear signals had their lowest
+proportion of the nonlinear signals had their minimum
 cross-validation error when fitted with a polynomial of degree
 3.
-This indicated that the polynomial line segments in 
-the unknown signal are cubic.
+This consistent minimum cross-validation error indicated
+that the polynomial line segments in the unknown signal are cubic.
 
 \begin{figure}[htbp]
 \centering
@@ -119,31 +121,32 @@ Having incorporated cubic regression into my `\texttt{lsr.py}'
 least-squares regression program, I ran the program on
 the `\texttt{basic\_3.csv}' and `\texttt{basic\_4.csv}'
 unknown signals;
-the outputs are shown in Figure \ref{fig:basic_3.csv}
-and Figure \ref{fig:basic_4.csv} respectively.
-The lines being a near-perfect fit allowed me to
-visually validate that a cubic polynomial is reasonable.
+Figure \ref{fig:basic_3.csv} and Figure \ref{fig:basic_4.csv}
+display these plots, respectively.
+The lines being a near-perfect fit allowed me to validate
+that a cubic polynomial is reasonable visually.
 
 \section{Choice of unknown function}
 
 Using my `\texttt{display.py}' program to visualise the
-signals, I produced a list of potential functions that could
-be used to produce the line segments, based on their shapes:
+signals, I produced a list of potential `unknown functions'
+that could represent the underlying signal of line segments,
+based on their shapes:
 $\vb{w}_{1}sin(x) + \vb{w}_{2}$,
 $\vb{w}_{1}cos(x) + \vb{w}_{2}$,
 $\vb{w}_{1}tan(x) + \vb{w}_{2}$ and
 $\vb{w}_{1}e^{x} + \vb{w}_{2}$.
 
-I then created a program `\texttt{unknown.py}' that
+I then created a program, `\texttt{unknown.py}', that
 calculated the cross-validation error for each of the
-nonlinear line segments previously identified, when
+nonlinear line segments previously identified when
 trained using each of the potential unknown functions.
-The values of which were outputted in a table---similar 
-to that used to determine the degree of the polynomial.
+A table displayed the cross-validation errors---similar 
+to that used to determine the polynomial degree.
 
 Having analysed the cross-validation errors, it was clear
 that all nonlinear signals that were likely not
-a cubic polynomial, had their minimum cross-validation
+a cubic polynomial had their minimum cross-validation
 error when trained to fit the function
 $\vb{w}_{1}sin(x) + \vb{w}_{2}$.
 
@@ -189,25 +192,25 @@ cross-validation when producing a model for each 20-point
 line segment. Leave-one-out cross-validation is 
 an extreme case of $k$-fold cross validation
 such that $k = n$, where
-$n$ is the number of data-points (in this case 20).
+$n$ is the number of data points (in this case, 20).
 Despite being computationally expensive, I believe that
 leave-one-out cross-validation is an appropriate technique
 to prevent overfitting in this case,
 owing to the limited sample size of each line segment.
 
 Leave-one-out cross-validation involves using each of
-the 20 data-points exactly once as validation data for a model
-trained using the other 19 data-points. 
+the 20 data points exactly once as validation data for a model
+trained using the other 19 data points. 
 The cross-validation error for each function type is calculated
 as follows \cite{Stanford}:
 \[
     CV_{(n)} = \frac{1}{n} \sum_{i = 1}^{n} (y_{i} - \hat{y}^{(-i)})^{2}
 \]
 where
-$n$ is the number of datapoints in a line segment (i.e. 20);
-$y_{i}$ is the actual $y$-value for the $i$-th datapoint;
+$n$ is the number of data points in a line segment (i.e. 20);
+$y_{i}$ is the actual $y$-value for the $i$-th data point;
 and $\hat{y}^{(-i)}$ is the predicted $y$-value for the $i$-th
-datapoint, when trained without using the $i$-th sample.
+data point, when trained without using the $i$-th sample.
 
 The function type with the lowest cross-validation error
 is then selected for each line segment,
@@ -218,11 +221,11 @@ data points for that segment.
 
 To begin with,
 computing the matrix inverse using the \texttt{np.linalg.inv}
-method is computationally expensive and unncessary.
+method is computationally expensive and unnecessary.
 Instead, given $\vb{X}$ and $\vb{y}$, the maximum likelihood
 estimation could be computed directly as follows:
 \texttt{np.linalg.solve(X.T @ X, @ X.T @ y)}.
-This would be faster, as \texttt{np.linalg.inv}
+Computing $\vb{\hat{w}}$ directly would be faster, as \texttt{np.linalg.inv}
 computes the inverse of a matrix $\vb{A}$ by solving for $\vb{A}^{-1}$
 in $\vb{AA^{-1} = I}$ \cite{StackOverflow}.
 Thus, there would be a performance benefit by solving for
@@ -232,16 +235,16 @@ $\vb{X}^{T} \vb{X} \vb{\hat{w}} = \vb{X}^{T} \vb{y}$ directly.
 Another computationally expensive operation in my
 algorithm is that used to calculate the cross-validation error 
 using leave-one-out cross-validation.
-This is because it involves
+The method currently involves
 fitting the model and calculating the sum squared error
 $n$ times. 
 Instead, there exists a faster method I could have
 adopted that involves calculating the leverage.
-Despite this, I opted not to include this method; 
-owing to the fact that my program as it
-currently stands can be easily adapted to use $k$-fold
-cross-validation for any value of $k$ that is a factor of 20
-by changing the constant `\texttt{K}' in the code.
+Despite this, I opted not to include this method 
+because my program, as it currently stands, can be 
+easily adapted to use $k$-fold cross-validation for 
+any value of $k$ that is a factor of 20---changing
+the constant `\texttt{K}' in the code achieves this.
 
 \section{Testing}
 

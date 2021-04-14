@@ -220,10 +220,10 @@ as follows \cite{Stanford}:
     CV_{(n)} = \frac{1}{n} \sum_{i = 1}^{n} (y_{i} - \hat{y}^{(-i)})^{2}
 \]
 where
-$n$ is the number of data points in a line segment (i.e. 20);
-$y_{i}$ is the actual $y$-value for the $i$-th data point;
+$n$ is the number of data points in a line segment (i.e. 20),
+$y_{i}$ is the actual $y$-value for the $i$-th data point,
 and $\hat{y}^{(-i)}$ is the predicted $y$-value for the $i$-th
-data point, when trained without using the $i$-th sample.
+data point when trained without using the $i$-th sample.
 
 The function type with the lowest cross-validation error
 is then selected for each line segment,
@@ -236,7 +236,7 @@ To begin with,
 computing the matrix inverse using the \texttt{np.linalg.inv}
 method is computationally expensive and unnecessary.
 Instead, given $\vb{X}$ and $\vb{y}$, the maximum likelihood
-estimation could be computed directly as follows:
+estimation could be directly computed as follows:
 \texttt{np.linalg.solve(X.T @ X, @ X.T @ y)}.
 Computing $\vb{\hat{w}}$ directly would be faster, as \texttt{np.linalg.inv}
 computes the inverse of a matrix $\vb{A}$ by solving for $\vb{A}^{-1}$

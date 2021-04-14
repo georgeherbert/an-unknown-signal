@@ -1,7 +1,9 @@
 \documentclass[onecolumn, 12pt, a4paper]{article}
-\usepackage[a4paper,left = 2.5cm,right = 2.5cm, top = 2.5cm, bottom = 2.5cm]{geometry}
+\usepackage[a4paper,left = 2cm,right = 2cm, top = 2cm, bottom = 2cm]{geometry}
 \usepackage{physics}
 \usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{caption}
  
 \author{
   George Herbert\\
@@ -97,6 +99,18 @@ cross-validation error when fitted with a polynomial of degree
 3. This indicated that the polynomials in the unknown signal
 are cubic.
 
+Having incorporated cubic regression into my \texttt{lsr.py}
+least-squares regression program, I ran the program on
+the \texttt{basic\_3.csv} unknown signal;
+the output is shown in Figure \ref{fig:basic_3.csv}.
+
+\begin{figure}[htbp]
+    \centerline{\includegraphics[scale = 0.5]{images/basic_3.png}}
+    \captionsetup{width=.5\linewidth}
+    \caption{The graph produced by \texttt{lsr.py} for \texttt{basic\_3.csv}}
+    \label{fig:basic_3.csv}
+\end{figure}
+
 \section{Choice of unknown function}
 
 Using my \texttt{display.py} program to visualise the
@@ -120,19 +134,22 @@ a cubic polynomial, had their minimum cross-validation
 error when trained to fit the function
 $\vb{w}_{1}sin(x) + \vb{w}_{2}$.
 
+\begin{figure}[htbp]
+    \centerline{\includegraphics[scale = 0.5]{images/basic_5.png}}
+    \captionsetup{width=.5\linewidth}
+    \caption{The graph produced by \texttt{lsr.py} for \texttt{basic\_5.csv}}
+    \label{fig:basic_5.csv}
+\end{figure}
 
-\section{Overfitting}
+\section{Model selection}
 
 Overfitting occurs when a machine learning algorithm
 produces a model that has learnt the noise in the data
 as if it represents the structure of the underlying
-model. \cite{MSMI}
-
+model \cite{MSMI}.
 In the case of linear regression, overfitting is most
 likely to occur by producing a model with too complex a function
 type, such that it would fail to predict future observations.
-
-\section{Model selection}
 
 To prevent overfitting, I have used leave-one-out
 cross-validation when producing a model for each 20-point

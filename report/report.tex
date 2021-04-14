@@ -196,9 +196,10 @@ In the case of linear regression, overfitting is most
 likely to occur by producing a model with too complex a function
 type, such that it would fail to predict future observations.
 An example of this is shown in Figure \ref{fig:noise_2.csv}.
-On the left is a polynomial fit that is evidently too complex
+On the left is a polynomial fit that is likely too complex
 a function class for the data points, and as such would not
-predict future points accurately; on the right is a linear fit.
+predict future $y$-values for a set of given $x$-values
+as well as the linear fit on the right.
 
 To prevent overfitting, I have used leave-one-out
 cross-validation when producing a model for each 20-point

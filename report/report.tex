@@ -117,9 +117,11 @@ the unknown signal are cubic.
 
 Having incorporated cubic regression into my `\texttt{lsr.py}'
 least-squares regression program, I ran the program on
-the `\texttt{basic\_3.csv}' unknown signal;
-the output is shown in Figure \ref{fig:basic_3.csv}.
-The line being a near-perfect fit allowed me to
+the `\texttt{basic\_3.csv}' and `\texttt{basic\_4.csv}'
+unknown signals;
+the outputs are shown in Figure \ref{fig:basic_3.csv}
+and Figure \ref{fig:basic_4.csv} respectively.
+The lines being a near-perfect fit allowed me to
 visually validate that a cubic polynomial is reasonable.
 
 \section{Choice of unknown function}
@@ -150,13 +152,13 @@ $\vb{w}_{1}sin(x) + \vb{w}_{2}$.
 \begin{minipage}[b]{.49\textwidth}
     \includegraphics[width=\textwidth]{images/basic_5.png}
     \caption{Plot for `\texttt{basic\_5.csv}'}
-    \label{fig:basic_3.csv}
+    \label{fig:basic_5.csv}
 \end{minipage}
 \hfill
 \begin{minipage}[b]{.49\textwidth}
     \includegraphics[width=\textwidth]{images/adv_3.png}
     \caption{Plot for `\texttt{adv\_3.csv}'}
-    \label{fig:basic_4.csv}
+    \label{fig:adv_3.csv}
 \end{minipage}
 \end{figure}
 
@@ -164,8 +166,13 @@ Having incorporated regression to fit a function of the
 form $\vb{w}_{1}sin(x) + \vb{w}_{2}$ into my 
 `\texttt{lsr.py}'
 least-squares regression program, I ran the program on
-the `\texttt{basic\_5.csv}' unknown signal;
-the output is shown in Figure \ref{fig:basic_5.csv}.
+the `\texttt{basic\_5.csv}' and `\texttt{adv\_3.csv}'
+unknown signals;
+the outputs are shown in Figure \ref{fig:basic_5.csv}
+and Figure \ref{fig:adv_3.csv} respectively.
+The lines being a near-perfect fit allowed me to
+visually validate that the unknown function is of
+the form $\vb{w}_{1}sin(x) + \vb{w}_{2}$.
 
 \section{Model selection}
 

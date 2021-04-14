@@ -3,7 +3,7 @@
 \usepackage{physics}
 \usepackage{amsmath}
 \usepackage{graphicx}
-\usepackage{caption}
+\usepackage{subfig}
  
 \author{
   George Herbert\\
@@ -180,18 +180,12 @@ the form $\vb{w}_{1}sin(x) + \vb{w}_{2}$ visually.
 \section{Model selection}
 
 \begin{figure}[htbp]
-\centering
-\begin{minipage}[b]{.49\textwidth}
-    \includegraphics[width=\textwidth]{images/noise_2_0_polynomial.png}
-    \caption{Polynomial fit for first line segment in `\texttt{noise\_2.csv}'}
-    \label{fig:basic_5.csv}
-\end{minipage}
-\hfill
-\begin{minipage}[b]{.49\textwidth}
-    \includegraphics[width=\textwidth]{images/noise_2_0_linear.png}
-    \caption{Linear fit for for first line segment in `\texttt{noise\_2.csv}'}
-    \label{fig:adv_3.csv}
-\end{minipage}
+    \centering
+    \subfloat[Polynomial fit]{\includegraphics[width=0.49\textwidth]{images/noise_2_0_polynomial.png}\label{fig:f1}}
+    \hfill
+    \subfloat[Linear fit]{\includegraphics[width=0.49\textwidth]{images/noise_2_0_linear.png}\label{fig:f2}}
+    \caption{Two fits for the first line segment in `\texttt{noise\_2.csv}'}
+    \label{fig:noise_2.csv}
 \end{figure}
 
 Overfitting occurs when a machine learning algorithm
@@ -201,6 +195,10 @@ model \cite{MSMI}.
 In the case of linear regression, overfitting is most
 likely to occur by producing a model with too complex a function
 type, such that it would fail to predict future observations.
+An example of this is shown in Figure \ref{fig:noise_2.csv}.
+On the left is a polynomial fit that is evidently too complex
+a function class for the data points, and as such would not
+predict future points accurately; on the right is a linear fit.
 
 To prevent overfitting, I have used leave-one-out
 cross-validation when producing a model for each 20-point

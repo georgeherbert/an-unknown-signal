@@ -179,7 +179,7 @@ the form $\vb{w}_{1}sin(x) + \vb{w}_{2}$ visually.
 
 \begin{figure}[htbp]
     \centering
-    \subfloat[Polynomial fit]{\includegraphics[width=0.49\textwidth]{images/noise_2_0_polynomial.png}\label{fig:f1}}
+    \subfloat[Cubic fit]{\includegraphics[width=0.49\textwidth]{images/noise_2_0_polynomial.png}\label{fig:f1}}
     \hfill
     \subfloat[Linear fit]{\includegraphics[width=0.49\textwidth]{images/noise_2_0_linear.png}\label{fig:f2}}
     \caption{Two fits for the first line segment in `\texttt{noise\_2.csv}'}
@@ -194,11 +194,11 @@ In the case of linear regression, overfitting is most
 likely to occur by producing a model with too complex a function
 type, such that it would fail to predict future observations.
 Figure \ref{fig:noise_2.csv} shows an example of this. 
-On the left, (a) is a polynomial fit that is too complex a 
-function type for the data points. 
+On the left, (a) is a cubic fit that is too complex a 
+function type for the data points.
 It would not predict future $y$-values for a set of 
-given $x$-values as successfully as the linear fit on 
-the right (b).
+given $x$-values as successfully as the linear fit (b) on 
+the right.
 
 To prevent overfitting, I have used leave-one-out
 cross-validation when producing a model for each 20-point

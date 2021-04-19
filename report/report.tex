@@ -237,7 +237,7 @@ computing the matrix inverse using the \texttt{np.linalg.inv}
 method is computationally expensive and unnecessary.
 Instead, given $\vb{X}$ and $\vb{y}$, the maximum likelihood
 estimation of $\vb{w}$ could be directly computed as follows:
-\texttt{np.linalg.solve(X.T @ X, @ X.T @ y)}.
+\texttt{np.linalg.solve(X.T @ X, X.T @ y)}.
 Computing $\vb{\hat{w}}$ directly would be faster, as \texttt{np.linalg.inv}
 computes the inverse of a matrix $\vb{A}$ by solving for $\vb{A}^{-1}$
 in $\vb{AA^{-1} = I}$ \cite{StackOverflow}.

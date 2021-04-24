@@ -208,21 +208,19 @@ This is because the holdout method involved only a single run,
 and so was dependent on how the datapoints were randomly
 split into training and validation sets.
 Due to the limited number of data points in each line segment,
-this resulted in the program often providing wildly different results.
+this resulted in the program often producing wildly different results.
 On the other hand, as the holdout method only involved a single run, it was fast.
 
 Despite the speed of the holdout method, I wanted my increase the accuracy
 of my program.
 To do so, I implemented $k$-fold cross-validation.
-In particular, I opted to use leave-one-out cross-validation
-when producing a model for each 20-point line segment.
+In particular, I opted to use leave-one-out cross-validation.
 Leave-one-out cross-validation is 
 an extreme case of $k$-fold cross validation
 such that $k = n$, where
 $n$ is the number of data points (in this case, 20).
-
 Leave-one-out cross-validation involves using each of
-the 20 data points exactly once as validation data for a model
+the 20 data points in a given line segment exactly once as validation data for a model
 trained using the other 19 data points. 
 The cross-validation error for each function type is calculated
 as follows \cite{Stanford}:
@@ -239,6 +237,9 @@ As a result of having to produce $n$ different models,
 leave-one-out cross-validation can be computationally expensive.
 However, owing to the limited sample size of each line segment,
 I believe it to be an appropriate technique to use in this case.
+The result is completely deterministic, as it does not depend
+on a random seed.
+In addition, the result is far less biased than the holdout method.
 
 The function type with the lowest cross-validation error
 is then selected for each line segment,

@@ -112,28 +112,20 @@ This consistent minimum cross-validation error indicated
 that the polynomial line segments in the unknown signal are cubic.
 
 \begin{figure}[htbp]
-\centering
-\begin{minipage}[b]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{images/basic_3.png}
-    \caption{Plot for `\texttt{basic\_3.csv}'}
+    \centering
+    \subfloat[Quadratic fit]{\includegraphics[width = 0.4\textwidth]{images/basic_3_quadratic.png}\label{fig:basic_3_quadratic.csv}}
+    \hfill
+    \subfloat[Cubic fit]{\includegraphics[width = 0.4\textwidth]{images/basic_3.png}\label{fig:basic_3_cubic.csv}}
+    \caption{Two fits for `\texttt{basic\_3.csv}'}
     \label{fig:basic_3.csv}
-\end{minipage}
-\hfill
-\begin{minipage}[b]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{images/basic_4.png}
-    \caption{Plot for `\texttt{basic\_4.csv}'}
-    \label{fig:basic_4.csv}
-\end{minipage}
 \end{figure}
 
-Having incorporated cubic regression into my `\texttt{lsr.py}'
-least-squares regression program, I ran the program on
-the `\texttt{basic\_3.csv}' and `\texttt{basic\_4.csv}'
-unknown signals;
-Figure \ref{fig:basic_3.csv} and Figure \ref{fig:basic_4.csv}
-display these plots, respectively.
-The lines being a near-perfect fit allowed me to validate
-that a cubic polynomial is reasonable visually.
+To confirm this visually, I used the `\texttt{basic\_*.csv}' files
+as they have a negligable amount of noise.
+I produced fits using several different polynomials.
+An example of this is shown in Figure \ref{fig:basic_3.csv}.
+The quadratic fit shown in Figure \ref{fig:basic_3_quadratic.csv}
+is clearly not as good a fit as the cubic fit shown in Figure \ref{fig:basic_3_cubic.csv}.
 
 \section{Choice of unknown function}
 

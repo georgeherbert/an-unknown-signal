@@ -95,7 +95,7 @@ the characteristics of a lower-degree polynomial (e.g. low number of relative ex
     \end{center}
 \end{table}
 
-To better identify exactly the polynomial degree that was used
+To better identify exactly the polynomial degree used
 to generate the unknown signals, I created a program
 `\texttt{display.py}' to visualise the points.
 By inspecting the appearance of each segment, I drew up
@@ -171,7 +171,7 @@ I used it to verify that the unknown function was
 $\vb{w}_{1}sin(x) + \vb{w}_{2}$.
 To do so, I produced a fit for each of the potential
 unknown functions.
-An example of this is shown in Figure \ref{fig:basic_5.csv}.
+Figure \ref{fig:basic_5.csv} shows an example of this.
 The cosine fit shown in Figure \ref{fig:basic_5_cosine.csv}
 is a far worse fit than the sine fit shown in Figure
 \ref{fig:basic_5_sine.csv}, which fits almost perfectly.
@@ -229,7 +229,7 @@ as follows \cite{Stanford}:
 \]
 where
 $n$ is the number of data points in a line segment (i.e. 20),
-$y_{i}$ is the actual $y$-value for the $i$-th data point,
+$y_{i}$ is the actual $y$-value for the $i$-th data point
 and $\hat{y}^{(-i)}$ is the predicted $y$-value for the $i$-th
 data point when trained without using the $i$-th sample.
 
@@ -246,7 +246,7 @@ Leave-one-out cross-validation is also a less biased technique
 than $k$-fold cross-validation with values of $k < n$.
 
 My program then selects the function type with the lowest
-cross-validation error for each line segment
+cross-validation error for each line segment,
 and the weights $\vb{\hat{w}}$ are determined by training on all
 data points for that segment.
 
@@ -277,7 +277,7 @@ because my program, as it currently stands, can be
 easily adapted to use $k$-fold cross-validation for 
 any value of $k$ that is a factor of the number of points in each line segment---changing
 the constant `\texttt{K}' in the code achieves this.
-This is important as it leaves my code open to
+This flexibility is important as it leaves my code open to
 computing the best model for line segments of far greater length than 20.
 The constant `\texttt{POINTS\_IN\_SEGMENT}' can be increased to do this,
 then a lower value of $k$ can be used to decrease the computational cost.

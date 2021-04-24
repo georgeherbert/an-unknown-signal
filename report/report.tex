@@ -214,15 +214,15 @@ On the other hand, as the holdout method only involved a single run, it was fast
 Despite the speed of the holdout method, I wanted my increase the accuracy
 of my program. To do so, I implemented $k$-fold cross-validation.
 In particular, I opted to use leave-one-out cross-validation
-when producing a model fo each 20-point line segment.
+when producing a model for each 20-point line segment.
 Leave-one-out cross-validation is 
 an extreme case of $k$-fold cross validation
 such that $k = n$, where
 $n$ is the number of data points (in this case, 20).
-Despite being computationally expensive, I believe that
-leave-one-out cross-validation is an appropriate technique
-to prevent overfitting in this case,
-owing to the limited sample size of each line segment.
+As a result of having to produce $n$ different models,
+leave-one-out cross-validation can be computationally expensive.
+However, owing to the limited sample size of each line segment,
+I believe it to be an appropriate technique in this case.
 
 Leave-one-out cross-validation involves using each of
 the 20 data points exactly once as validation data for a model
@@ -278,6 +278,7 @@ I created a file, `\texttt{test.py}', that uses the
 \texttt{unittest} framework to test each of the methods
 in `\texttt{lsr.py}'.
 
+\clearpage
 \begin{thebibliography}{9}
 
     \bibitem{MSMI}

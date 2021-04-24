@@ -179,9 +179,9 @@ is a far worse fit than the sine fit shown in Figure
 
 \begin{figure}[htbp]
     \centering
-    \subfloat[Cubic fit]{\includegraphics[width = 0.45\textwidth]{images/noise_2_0_polynomial.png}\label{fig:f1}}
+    \subfloat[Cubic fit]{\includegraphics[width = 0.45\textwidth]{images/noise_2_0_polynomial.png}\label{fig:noise_2_polynomial.csv}}
     \hfill
-    \subfloat[Linear fit]{\includegraphics[width = 0.45\textwidth]{images/noise_2_0_linear.png}\label{fig:f2}}
+    \subfloat[Linear fit]{\includegraphics[width = 0.45\textwidth]{images/noise_2_0_linear.png}\label{fig:noise_2_linear.csv}}
     \caption{Two fits for the first line segment in `\texttt{noise\_2.csv}'}
     \label{fig:noise_2.csv}
 \end{figure}
@@ -194,15 +194,28 @@ In the case of linear regression, overfitting is most
 likely to occur by producing a model with too complex a function
 type, such that it would fail to predict future observations.
 Figure \ref{fig:noise_2.csv} shows an example of this. 
-On the left, (a) is a cubic fit that is too complex a 
+Figure \ref{fig:noise_2_polynomial.csv} shows a cubic fit that is too complex a 
 function type for the data points.
 It would not predict future $y$-values for a set of 
-given $x$-values as successfully as the linear fit (b) on 
-the right.
+given $x$-values as successfully as the linear fit shown in Figure \ref{fig:noise_2_linear.csv}
 
-To prevent overfitting, I have used leave-one-out
-cross-validation when producing a model for each 20-point
-line segment. Leave-one-out cross-validation is 
+My original implementation used the holdout method
+to detect overfitting, and determine the best model for a given line segment.
+However, despite experimenting with different
+sized training and validation sets, my program was consistently
+giving misleading results---both overfitting and underfitting.
+This is because the holdout method involved only a single run,
+and so was dependent on how the datapoints were randomly
+split into training and validation sets.
+Due to the limited number of data points in each line segment,
+this resulted in the program often providing wildly different results.
+On the other hand, as the holdout method only involved a single run, it was fast.
+
+Despite the speed of the holdout method, I wanted my increase the accuracy
+of my program. To do so, I implemented $k$-fold cross-validation.
+In particular, I opted to use leave-one-out cross-validation
+when producing a model fo each 20-point line segment.
+Leave-one-out cross-validation is 
 an extreme case of $k$-fold cross validation
 such that $k = n$, where
 $n$ is the number of data points (in this case, 20).

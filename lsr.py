@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 # Constants
 ORDER = 3 # Order of the polynomial function
 K = 20 # Value of k in k-fold (i.e. the number of folds)
+POINTS_IN_SEGMENT = 20 # Number of points in each segment
 
 class UnknownSignal:
     def __init__(self, xs, ys, plot):
@@ -17,7 +18,7 @@ class UnknownSignal:
         
         # The number of points and segments of an unknown signal
         self.numPoints = len(self.xs)
-        self.numSegments = self.numPoints // 20
+        self.numSegments = self.numPoints // POINTS_IN_SEGMENT
 
         # The segments
         self.segments = self.splitIntoSegments()

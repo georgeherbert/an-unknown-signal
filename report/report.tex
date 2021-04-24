@@ -67,6 +67,16 @@ or the unknown function $f$, respectively.
 
 \section{Choice of polynomial degree}
 
+I used several different techniques to determine and validate that
+the polynomial degree used to genereate the unknown signals was likely cubic.
+
+Firsly, a polynomial of degree $n$ can have a maximum of $n - 1$ relative extrema.
+Across all of the unknown signals, no line segment appeared to have more than two relative extrema.
+This made it is likely, but not definitive, that the polynomial degree was relatively low (e.g. cubic, quartic).
+However, there was still a possibility the polynomials used to generate the unknown signals
+were of a higher degree, and that the segments chosen just happened to display
+the characteristics of a lower-degree polynomial (e.g. low number of relative extrema).
+
 \begin{table}[htbp]
     \begin{center}
         \caption{\label{tab:degree.py}Section of the output from `\texttt{degree.py}'}
@@ -84,15 +94,16 @@ or the unknown function $f$, respectively.
     \end{center}
 \end{table}
 
-Having created a program, `\texttt{display.py}', to visualise
-the points, I drew up a list of segments that appeared 
-nonlinear.
-Then, I created a program, `\texttt{degree.py}', that calculated
+To better identify exactly which polynomial degree was used
+to generate the unknown signals, I created a program
+`\texttt{display.py}' to visualise the points.
+By inspecting the appearance of each segement, I drew up
+a list of nonlinear segments.
+I then created a program, `\texttt{degree.py}', that calculated
 the cross-validation error for these line segments
 when trained using a model with a polynomial of degree 2
 to a polynomial of degree 10; Table \ref{tab:degree.py}
 shows a small section from the output of this program.
-
 Having analysed the output, it was clear that a large
 proportion of the nonlinear signals had their minimum
 cross-validation error when fitted with a polynomial of degree

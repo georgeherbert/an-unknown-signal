@@ -212,17 +212,14 @@ this resulted in the program often providing wildly different results.
 On the other hand, as the holdout method only involved a single run, it was fast.
 
 Despite the speed of the holdout method, I wanted my increase the accuracy
-of my program. To do so, I implemented $k$-fold cross-validation.
+of my program.
+To do so, I implemented $k$-fold cross-validation.
 In particular, I opted to use leave-one-out cross-validation
 when producing a model for each 20-point line segment.
 Leave-one-out cross-validation is 
 an extreme case of $k$-fold cross validation
 such that $k = n$, where
 $n$ is the number of data points (in this case, 20).
-As a result of having to produce $n$ different models,
-leave-one-out cross-validation can be computationally expensive.
-However, owing to the limited sample size of each line segment,
-I believe it to be an appropriate technique in this case.
 
 Leave-one-out cross-validation involves using each of
 the 20 data points exactly once as validation data for a model
@@ -237,6 +234,11 @@ $n$ is the number of data points in a line segment (i.e. 20),
 $y_{i}$ is the actual $y$-value for the $i$-th data point,
 and $\hat{y}^{(-i)}$ is the predicted $y$-value for the $i$-th
 data point when trained without using the $i$-th sample.
+
+As a result of having to produce $n$ different models,
+leave-one-out cross-validation can be computationally expensive.
+However, owing to the limited sample size of each line segment,
+I believe it to be an appropriate technique to use in this case.
 
 The function type with the lowest cross-validation error
 is then selected for each line segment,
@@ -269,7 +271,7 @@ adopted that involves calculating the leverage.
 Despite this, I opted not to include this method 
 because my program, as it currently stands, can be 
 easily adapted to use $k$-fold cross-validation for 
-any value of $k$ that is a factor of 20---changing
+any value of $k$ that is a factor of the number of points in each line segment---changing
 the constant `\texttt{K}' in the code achieves this.
 
 \section{Testing}

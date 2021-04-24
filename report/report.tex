@@ -236,10 +236,13 @@ data point when trained without using the $i$-th sample.
 As a result of having to produce $n$ different models,
 leave-one-out cross-validation can be computationally expensive.
 However, owing to the limited sample size of each line segment,
-I believe it to be an appropriate technique to use in this case.
-The result is completely deterministic, as it does not depend
-on a random seed.
-In addition, the result is far less biased than the holdout method.
+I believe it to be an appropriate technique to use in this case---on
+most modern computers, it takes very little time
+to produce twenty different models.
+Additionally, the result is completely deterministic, as it does not depend
+on a random seed, and so is far less unstable than the holdout method.
+Leave-one-out cross-validation is also a less biased technique
+than $k$-fold cross-validation with values of $k < n$.
 
 The function type with the lowest cross-validation error
 is then selected for each line segment,

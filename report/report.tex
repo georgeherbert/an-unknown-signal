@@ -197,7 +197,7 @@ Figure \ref{fig:noise_2.csv} shows an example of this.
 Figure \ref{fig:noise_2_polynomial.csv} shows a cubic fit that is too complex a 
 function type for the data points.
 It would not predict future $y$-values for a set of 
-given $x$-values as successfully as the linear fit shown in Figure \ref{fig:noise_2_linear.csv}
+given $x$-values as successfully as the linear fit shown in Figure \ref{fig:noise_2_linear.csv}.
 
 My original implementation used the holdout method
 to detect overfitting, and determine the best model for a given line segment.
@@ -238,7 +238,8 @@ leave-one-out cross-validation can be computationally expensive.
 However, owing to the limited sample size of each line segment,
 I believe it to be an appropriate technique to use in this case---on
 most modern computers, it takes very little time
-to produce twenty different models.
+to produce twenty different models when each model is trained
+on only nineteen data points.
 Additionally, the result is completely deterministic, as it does not depend
 on a random seed, and so is far less unstable than the holdout method.
 Leave-one-out cross-validation is also a less biased technique
@@ -257,7 +258,7 @@ method is computationally expensive and unnecessary.
 Instead, given $\vb{X}$ and $\vb{y}$, the maximum likelihood
 estimation of $\vb{w}$ could be directly computed as follows:
 \texttt{np.linalg.solve(X.T @ X, X.T @ y)}.
-Computing $\vb{\hat{w}}$ directly would be faster, as \texttt{np.linalg.inv}
+This would be faster, as \texttt{np.linalg.inv}
 computes the inverse of a matrix $\vb{A}$ by solving for $\vb{A}^{-1}$
 in $\vb{AA^{-1} = I}$ \cite{StackOverflow}.
 Thus, there would be a performance benefit by solving for
@@ -277,6 +278,10 @@ because my program, as it currently stands, can be
 easily adapted to use $k$-fold cross-validation for 
 any value of $k$ that is a factor of the number of points in each line segment---changing
 the constant `\texttt{K}' in the code achieves this.
+I believe this is important as it leaves my code open to
+computing the best model for line segments of far greater length than 20.
+The constant `\texttt{POINTS\_IN\_SEGMENT}' can increased to do this,
+and a lower value of $k$ can be used to decrease the computational cost.
 
 \section{Testing}
 

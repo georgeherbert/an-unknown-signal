@@ -113,9 +113,9 @@ that the polynomial line segments in the unknown signal are cubic.
 
 \begin{figure}[htbp]
     \centering
-    \subfloat[Quadratic fit]{\includegraphics[width = 0.4\textwidth]{images/basic_3_quadratic.png}\label{fig:basic_3_quadratic.csv}}
+    \subfloat[Quadratic fit]{\includegraphics[width = 0.45\textwidth]{images/basic_3_quadratic.png}\label{fig:basic_3_quadratic.csv}}
     \hfill
-    \subfloat[Cubic fit]{\includegraphics[width = 0.4\textwidth]{images/basic_3.png}\label{fig:basic_3_cubic.csv}}
+    \subfloat[Cubic fit]{\includegraphics[width = 0.45\textwidth]{images/basic_3.png}\label{fig:basic_3_cubic.csv}}
     \caption{Two fits for `\texttt{basic\_3.csv}'}
     \label{fig:basic_3.csv}
 \end{figure}
@@ -131,20 +131,18 @@ is clearly not as good a fit as the cubic fit shown in Figure \ref{fig:basic_3_c
 
 Using my `\texttt{display.py}' program to visualise the
 signals, I produced a list of potential `unknown functions'
-that could represent the underlying signal of line segments,
+that could represent the underlying signal of line segments
 based on their shapes:
 $\vb{w}_{1}sin(x) + \vb{w}_{2}$,
 $\vb{w}_{1}cos(x) + \vb{w}_{2}$,
 $\vb{w}_{1}tan(x) + \vb{w}_{2}$ and
 $\vb{w}_{1}e^{x} + \vb{w}_{2}$.
-
 I then created a program, `\texttt{unknown.py}', that
 calculated the cross-validation error for each of the
 nonlinear line segments previously identified when
 trained using each of the potential unknown functions.
 A table displayed the cross-validation errors---similar 
 to that used to determine the polynomial degree.
-
 Having analysed the cross-validation errors, it was clear
 that all nonlinear signals that were likely not
 a cubic polynomial had their minimum cross-validation
@@ -153,12 +151,16 @@ $\vb{w}_{1}sin(x) + \vb{w}_{2}$.
 
 \begin{figure}[htbp]
     \centering
-    \subfloat[Cosine fit]{\includegraphics[width = 0.4\textwidth]{images/basic_5_cosine.png}\label{fig:basic_5_cosine.csv}}
+    \subfloat[Cosine fit]{\includegraphics[width = 0.45\textwidth]{images/basic_5_cosine.png}\label{fig:basic_5_cosine.csv}}
     \hfill
-    \subfloat[Sine fit]{\includegraphics[width = 0.4\textwidth]{images/basic_5.png}\label{fig:basic_5_sine.csv}}
+    \subfloat[Sine fit]{\includegraphics[width = 0.45\textwidth]{images/basic_5.png}\label{fig:basic_5_sine.csv}}
     \caption{Two fits for `\texttt{basic\_3.csv}'}
     \label{fig:basic_5.csv}
 \end{figure}
+
+However, when trained to fit the function $\vb{w}_{1}cos(x) + \vb{w}_{2}$
+the cross-validation errors were also quite small.
+To 
 
 Having incorporated regression to fit a function of the
 form $\vb{w}_{1}sin(x) + \vb{w}_{2}$ into my 
@@ -176,9 +178,9 @@ the form $\vb{w}_{1}sin(x) + \vb{w}_{2}$ visually.
 
 \begin{figure}[htbp]
     \centering
-    \subfloat[Cubic fit]{\includegraphics[width = 0.4\textwidth]{images/noise_2_0_polynomial.png}\label{fig:f1}}
+    \subfloat[Cubic fit]{\includegraphics[width = 0.45\textwidth]{images/noise_2_0_polynomial.png}\label{fig:f1}}
     \hfill
-    \subfloat[Linear fit]{\includegraphics[width = 0.4\textwidth]{images/noise_2_0_linear.png}\label{fig:f2}}
+    \subfloat[Linear fit]{\includegraphics[width = 0.45\textwidth]{images/noise_2_0_linear.png}\label{fig:f2}}
     \caption{Two fits for the first line segment in `\texttt{noise\_2.csv}'}
     \label{fig:noise_2.csv}
 \end{figure}

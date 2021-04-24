@@ -252,8 +252,7 @@ data points for that segment.
 
 \section{Optimisations and improvements}
 
-To begin with,
-computing the matrix inverse using the \texttt{np.linalg.inv}
+Computing the matrix inverse using the \texttt{np.linalg.inv}
 method is computationally expensive and unnecessary.
 Instead, given $\vb{X}$ and $\vb{y}$, the maximum likelihood
 estimation of $\vb{w}$ could be directly computed as follows:

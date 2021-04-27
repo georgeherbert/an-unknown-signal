@@ -35,7 +35,7 @@ This equation is implemented in my code as the following
 method:
 \begin{verbatim}
 def regressionNormalEquation(self, X, y):
-    return np.linalg.inv(X.T @ X) @ X.T @ y
+    return np.linalg.solve(X.T @ X, X.T @ y)
 \end{verbatim}
 
 $\vb{X}$ can take one of the following

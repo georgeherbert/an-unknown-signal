@@ -257,6 +257,7 @@ in `\texttt{adv\_3.csv}' as a sine wave.
 However, as the segment has a large amount of noise, I cannot be
 confident when inspecting the fit that this is correct---visually, it appears as if it could equally as likely
 be linear or polynomial.
+To correctly identify the signal, I believe there would need to be more data.
 
 \section{Potential optimisations}
 
@@ -273,7 +274,7 @@ be linear or polynomial.
 % $\vb{X}^{T} \vb{X} \vb{\hat{w}} = \vb{X}^{T} \vb{y}$ directly.
 
 Calculating the cross-validation error using leave-one-out
-cross-validation is a relatively computationally expensive operation.
+cross-validation is a computationally expensive operation.
 The method currently involves
 fitting the model and calculating the sum squared error
 $n$ times. 

@@ -264,9 +264,8 @@ data points for that segment.
 % $\vb{\hat{w}}$ in
 % $\vb{X}^{T} \vb{X} \vb{\hat{w}} = \vb{X}^{T} \vb{y}$ directly.
 
-A computationally expensive operation in my
-algorithm is that used to calculate the cross-validation error 
-using leave-one-out cross-validation.
+Calculating the cross-validation error using leave-one-out
+cross-validation is a relatively computationally expensive operation.
 The method currently involves
 fitting the model and calculating the sum squared error
 $n$ times. 

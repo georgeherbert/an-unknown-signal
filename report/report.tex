@@ -178,15 +178,6 @@ is a far worse fit than the sine fit shown in Figure
 
 \section{Model selection}
 
-\begin{figure}[htbp]
-    \centering
-    \subfloat[Cubic fit]{\includegraphics[width = 0.45\textwidth]{images/noise_2_0_polynomial.png}\label{fig:noise_2_polynomial.csv}}
-    \hfill
-    \subfloat[Linear fit]{\includegraphics[width = 0.45\textwidth]{images/noise_2_0_linear.png}\label{fig:noise_2_linear.csv}}
-    \caption{Two fits for the first line segment in `\texttt{noise\_2.csv}'}
-    \label{fig:noise_2.csv}
-\end{figure}
-
 Overfitting occurs when a machine learning algorithm
 produces a model that has learnt the noise in the data
 as if it represents the structure of the underlying
@@ -199,6 +190,15 @@ Figure \ref{fig:noise_2_polynomial.csv} shows a cubic fit that is too complex a
 function type for the data points.
 It would not predict future $y$-values for a set of 
 given $x$-values as successfully as the linear fit shown in Figure \ref{fig:noise_2_linear.csv}.
+
+\begin{figure}[htbp]
+    \centering
+    \subfloat[Cubic fit]{\includegraphics[width = 0.45\textwidth]{images/noise_2_0_polynomial.png}\label{fig:noise_2_polynomial.csv}}
+    \hfill
+    \subfloat[Linear fit]{\includegraphics[width = 0.45\textwidth]{images/noise_2_0_linear.png}\label{fig:noise_2_linear.csv}}
+    \caption{Two fits for the first line segment in `\texttt{noise\_2.csv}'}
+    \label{fig:noise_2.csv}
+\end{figure}
 
 My original implementation used the holdout method
 to detect overfitting and determine the best model for a given line segment.

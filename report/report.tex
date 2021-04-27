@@ -250,21 +250,21 @@ cross-validation error for each line segment,
 and the weights $\vb{\hat{w}}$ are determined by training on all
 data points for that segment.
 
-\section{Optimisations and improvements}
+\section{Potential optimisations}
 
-Computing the matrix inverse using the \texttt{np.linalg.inv}
-method is computationally expensive and unnecessary.
-Instead, given $\vb{X}$ and $\vb{y}$, the maximum likelihood
-estimation of $\vb{w}$ could be directly computed as follows:
-\texttt{np.linalg.solve(X.T @ X, X.T @ y)}.
-This would be faster, as \texttt{np.linalg.inv}
-computes the inverse of a matrix $\vb{A}$ by solving for $\vb{A}^{-1}$
-in $\vb{AA^{-1} = I}$ \cite{StackOverflow}.
-Thus, there would be a performance benefit by solving for
-$\vb{\hat{w}}$ in
-$\vb{X}^{T} \vb{X} \vb{\hat{w}} = \vb{X}^{T} \vb{y}$ directly.
+% Computing the matrix inverse using the \texttt{np.linalg.inv}
+% method is computationally expensive and unnecessary.
+% Instead, given $\vb{X}$ and $\vb{y}$, the maximum likelihood
+% estimation of $\vb{w}$ could be directly computed as follows:
+% \texttt{np.linalg.solve(X.T @ X, X.T @ y)}.
+% This would be faster, as \texttt{np.linalg.inv}
+% computes the inverse of a matrix $\vb{A}$ by solving for $\vb{A}^{-1}$
+% in $\vb{AA^{-1} = I}$ \cite{StackOverflow}.
+% Thus, there would be a performance benefit by solving for
+% $\vb{\hat{w}}$ in
+% $\vb{X}^{T} \vb{X} \vb{\hat{w}} = \vb{X}^{T} \vb{y}$ directly.
 
-Another computationally expensive operation in my
+A computationally expensive operation in my
 algorithm is that used to calculate the cross-validation error 
 using leave-one-out cross-validation.
 The method currently involves
@@ -301,12 +301,10 @@ in `\texttt{lsr.py}'.
     \textit{Leave one out cross-validation (LOOCV) --- STATS 202}
     https://web.stanford.edu/class/stats202/notes/Resampling/LOOCV.html
 
-    \bibitem{StackOverflow}
-    Muldal, A. (2017)
-    \textit{Why does numpy.linalg.solve() offer more precise matrix inversions than numpy.linalg.inv()?}
-    https://stackoverflow.com/a/31257909/8540479
-
-
+    % \bibitem{StackOverflow}
+    % Muldal, A. (2017)
+    % \textit{Why does numpy.linalg.solve() offer more precise matrix inversions than numpy.linalg.inv()?}
+    % https://stackoverflow.com/a/31257909/8540479
 
 \end{thebibliography}
     

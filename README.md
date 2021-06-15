@@ -9,7 +9,7 @@ The coursework instructions are in the file [instructions.pdf](instructions.pdf)
 The program takes in a set of 2D points of length a multiple of 20 (e.g. 20, 40, 60) which are supposed to be points of a signal that needs to be reconstructed. To reconstruct the signal, the program then calculates the best model for each 20-point segment, out of three possible forms:
 - <i>ax + b</i>
 - <i>ax<sup>3</sup> + bx<sup>2</sup> + cx + d</i>
-- <i>asin(x) + b</i>.
+- <i>asin(x) + b</i>
 
 Leave-one-out cross-validation is used to detect overfitting.
 
